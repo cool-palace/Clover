@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/sounds"/>
+    <qresource prefix="/images">
+        <file>bg.jpg</file>
+        <file>player-left.png</file>
+        <file>player-right.png</file>
+        <file>bug.png</file>
+        <file>passage-1.png</file>
+        <file>passage-2.png</file>
+    </qresource>
+</RCC>
