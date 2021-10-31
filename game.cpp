@@ -137,7 +137,9 @@ void Game::displayMainMenu(){
     int byPos = 275;
     playButton->setPos(bxPos,byPos);
 //    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
-    connect(playButton,SIGNAL(clicked()),this,SLOT(phones_game()));
+//    connect(playButton,SIGNAL(clicked()),this,SLOT(phones_game()));
+    connect(playButton,SIGNAL(clicked()),this,SLOT(bug_fight()));
+//    connect(playButton,SIGNAL(clicked()),this,SLOT(drink_game()));
     scene->addItem(playButton);
 
     // create the quit button
@@ -206,6 +208,8 @@ void Game::outside() {
 
 void Game::phones_game() {
     scene->clear();
+    QString str = ":/images/bg-buzz-%1.png";
+    setBackgroundBrush(QBrush(QImage(str.arg(Buzz::current_level()))));
     scene->setSceneRect(0,0,800,600);
     setSceneRect(0,0,800,600);
 
@@ -240,6 +244,61 @@ void Game::phones_game() {
     connect(passage,SIGNAL(phone_game_end()),this,SLOT(displayMainMenu()));
 //    buzz->setPos(scene->width()/2, scene->height()/2);
 //    connect(phonesgame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
+    show();
+}
+
+void Game::drink_game() {
+//    scene->setSceneRect(0,0,800,600);
+//    setSceneRect(0,0,800,600);
+
+//    music->setCurrentIndex(4);
+//    current_music->setVolume(10);
+//    current_music->play();
+
+    // create a dialog box
+    dialogbox = new DialogBox();
+    dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
+
+    DrinkGame * drinkgame = new DrinkGame();
+    scene->addItem(drinkgame);
+    scene->addItem(dialogbox);
+
+    connect(drinkgame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
+    show();
+}
+
+void Game::bug_fight() {
+//    scene->setSceneRect(0,0,800,600);
+//    setSceneRect(0,0,800,600);
+    scene->clear();
+    setBackgroundBrush(QBrush(QImage(":/images/bg-fight.png")));
+
+//    music->setCurrentIndex(4);
+//    current_music->setVolume(10);
+//    current_music->play();
+
+    // create a dialog box
+    dialogbox = new DialogBox();
+    dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
+    scene->addItem(dialogbox);
+
+    player = new Player();
+    player->setPixmap(QPixmap(":/images/player-right.png"));
+    int pxPos = 0;
+    int pyPos = height()/2 - player->boundingRect().height()*player->scale()/2;
+    player->setPos(pxPos,pyPos);
+    player->setFlag(QGraphicsItem::ItemIsFocusable);
+    player->setFocus();
+    scene->addItem(player);
+    connect(player,SIGNAL(dialogCall(int, int)),dialogbox,SLOT(getBox(int, int)));
+
+    for (int i = 0; i < 5; ++i) {
+        bug[i] = new Bug();
+        bug[i]->setPos(rand()%500+300, rand()%500);
+        scene->addItem(bug[i]);
+    }
+
+    dialogbox->getBox(bugFightStart,bugFightStart);
     show();
 }
 
@@ -293,6 +352,9 @@ const QVector<Speechline> Game::speech = {
     {":/images/deadman.png", "Можешь мне не верить, но лучше попробовать их найти, пока есть время. Если ты превратишься в бабайку, пути назад не будет."},
     {":/images/player-annoyed.png", "<i>Ничего не поделаешь, придётся попытаться.</i>"},
     {":/images/player.png", "Ладно, но где мне искать эти ключи?"},
-    {":/images/deadman.png", "Вот здесь, снизу, есть выход, попробуй посмотреть снаружи."} //+30
+    {":/images/deadman.png", "Вот здесь, снизу, есть выход, попробуй посмотреть снаружи."}, //+30
+
+    {":/images/bug.png", "Сдавайся!"}, //+30
+    {":/images/player.png", "Я победила!"},
 
 };

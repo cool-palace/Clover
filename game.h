@@ -10,7 +10,7 @@
 #include "npc.h"
 #include "dialogbox.h"
 #include "button.h"
-//#include "phonesgame.h"
+#include "drinkgame.h"
 //#include "riddlebox.h"
 #include <QVector>
 
@@ -32,7 +32,7 @@ public:
 //    Exit * exit;
 //    Cave * cave;
 //    Entrance * entrance;
-//    Snake * snake[2];
+    Bug * bug[5];
 //    Witch * witch;
 
     QTimer * timer;
@@ -58,11 +58,14 @@ public:
     constexpr static int worldSize = 2760;
 
     constexpr static int deadmanSeq1Start = 0;
+    constexpr static int bugFightStart = 31;
 
 public slots:
     void start();
     void outside();
     void phones_game();
+    void drink_game();
+    void bug_fight();
     void displayMainMenu();
 };
 

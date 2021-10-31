@@ -7,5 +7,21 @@
         <file>bug.png</file>
         <file>passage-1.png</file>
         <file>passage-2.png</file>
+        <file>drink-small-1.png</file>
+        <file>drink-small-2.png</file>
+        <file>drink-small-3.png</file>
+        <file>drink-small-4.png</file>
+        <file>drink-small-5.png</file>
+        <file>bg-buzz-1.png</file>
+        <file>bg-buzz-2.png</file>
+        <file>bg-buzz-3.png</file>
+        <file>bug-sprite.png</file>
+        <file>bg-field.png</file>
+        <file>bg-fight.png</file>
+        <file>bg-start.png</file>
+        <file>bullet.png</file>
+        <file>bug-shot.png</file>
+        <file>boss-hit.png</file>
+        <file>boss-sprite.png</file>
     </qresource>
 </RCC>

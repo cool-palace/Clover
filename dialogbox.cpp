@@ -41,6 +41,7 @@ DialogBox::~DialogBox() {
     delete line;
     delete avatar;
     delete timer;
+    qDebug() << "db del";
 }
 
 void DialogBox::dialog_recharge() {
@@ -53,8 +54,8 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 
         if (start == end) {
             hide();
-//            game->player->setFocus();
-//            switch (end) {
+            game->player->setFocus();
+            switch (end) {
 //            case Game::deadmanSeq1Start+30:
 //                game->exit->show();
 //                game->progress = Game::INTRO_COMPLETE;
@@ -63,17 +64,33 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 //                game->current_music->play();
 //                break;
 
-//            case Game::kidsSeqStart+10:
-//                // Гуляем и ловим собак
-//                game->progress = Game::DOG_QUEST_STARTED;
-//                game->kids->setParentItem(game->player);
-//                game->kids->setPos(60,9);
-//                for (int i = 0; i < 1; ++i) {
-//                    game->dog = new Dog();
-//                    game->dog->setPos(300,2000);
-//                    game->scene->addItem(game->dog);
-//                }
-//                break;
+            case Game::bugFightStart:
+                // Начало боя с жуками
+//                game->music->setCurrentIndex(5);
+//                game->current_music->setVolume(50);
+//                game->current_music->play();
+                game->player->enable_shooting();
+                for (int i = 0; i < 5; ++i) {
+                    game->bug[i]->start();
+                }
+//                game->progress = Game::BUG_FIGHT_STARTED;
+                break;
+
+            case Game::bugFightStart+1:
+                // Битва с боссом
+//                game->music->setCurrentIndex(5);
+//                game->current_music->setVolume(50);
+//                game->current_music->play();
+                for (int i = 0; i < 5; ++i) {
+                    delete game->bug[i];
+                }
+
+                BugBoss * boss = new BugBoss();
+                boss->setPos(game->scene->width()-275, game->scene->height()/2 - boss->boundingRect().height()/2);
+                game->scene->addItem(boss);
+                boss->start();
+//                game->progress = Game::BUG_FIGHT_STARTED;
+                break;
 
 //            case Game::kidsSeqStart+15:
 //                game->kb->show();
@@ -277,7 +294,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 //                game->deadman->setParentItem(game->player);
 //                game->deadman->setPos(game->player->boundingRect().width(),0);
 //                break;
-//            }
+            }
 
 
         } else {

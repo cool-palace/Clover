@@ -23,6 +23,10 @@ public:
         RIGHT
     };
 
+public slots:
+    void shot();
+    void enable_shooting();
+
 signals:
     void dialogCall(int start, int end);
     void goingOut();

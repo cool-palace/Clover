@@ -20,6 +20,10 @@ Player::~Player() {
     delete bulletSound;
 }
 
+void Player::enable_shooting() {
+    canShoot = true;
+}
+
 void Player::setMovable() {
     isMovable = true;
 }
@@ -34,39 +38,40 @@ bool Player::phones_are_on() {
 
 void Player::keyPressEvent(QKeyEvent *event){
 
-    if (event->key() == Qt::Key_Space && !canShoot) {
-        phones_on = true;
+    if (event->key() == Qt::Key_Space) {
+        if (!canShoot) {
+            phones_on = true;
+            setImmobile();
+        } else if (canShoot && Bullet::bullet_count < 10) {
+            direction = RIGHT;
+
+    //        if (bulletSound->state() == QMediaPlayer::PlayingState){
+    //            bulletSound->setPosition(0);
+    //        } else if (bulletSound->state() == QMediaPlayer::StoppedState){
+    //            bulletSound->play();
+    //        }
+
+            Bullet * bullet = new Bullet(direction);
+
+            switch (direction) {
+            case UP:
+                bullet->setPos(x()+boundingRect().width()/2,y()-bullet->boundingRect().height());
+                break;
+            case DOWN:
+                bullet->setPos(x()+boundingRect().width()/2,y()+boundingRect().height());
+                break;
+            case LEFT:
+                bullet->setPos(x()-bullet->boundingRect().width(),y()+boundingRect().height()/2);
+                break;
+            case RIGHT:
+                bullet->setPos(x()+boundingRect().width(),y()+boundingRect().height()/2);
+                break;
+            }
+            game->scene->addItem(bullet);
+            return;
+        }
+
     }
-
-//    if (event->key() == Qt::Key_Space && canShoot && Bullet::bullet_count < 10) {
-//        if (game->progress == Game::OUTSIDE_EMPTINESS_DISCOVERED
-//                || game->progress == Game::DEADMAN_REVIVED) direction = LEFT;
-
-//        if (bulletSound->state() == QMediaPlayer::PlayingState){
-//            bulletSound->setPosition(0);
-//        } else if (bulletSound->state() == QMediaPlayer::StoppedState){
-//            bulletSound->play();
-//        }
-
-//        Bullet * bullet = new Bullet(direction, bullet_size);
-
-//        switch (direction) {
-//        case UP:
-//            bullet->setPos(x()+boundingRect().width()/2,y()-bullet->boundingRect().height());
-//            break;
-//        case DOWN:
-//            bullet->setPos(x()+boundingRect().width()/2,y()+boundingRect().height());
-//            break;
-//        case LEFT:
-//            bullet->setPos(x()-bullet->boundingRect().width(),y()+boundingRect().height()/2);
-//            break;
-//        case RIGHT:
-//            bullet->setPos(x()+boundingRect().width(),y()+boundingRect().height()/2);
-//            break;
-//        }
-//        game->scene->addItem(bullet);
-//        return;
-//    }
 
     // calculating new position
 
@@ -121,7 +126,7 @@ void Player::keyPressEvent(QKeyEvent *event){
 
     QList<QGraphicsItem *> colliding_items = rect->collidingItems();
     QList<QGraphicsItem *> child_items = childItems();
-
+    delete rect;
 
     for (int i = 0; i < child_items.size(); ++i) {
         for (int j = 0; j < colliding_items.size(); ++j) {
@@ -133,12 +138,10 @@ void Player::keyPressEvent(QKeyEvent *event){
         }
     }
 
-
     for (int i = 0, n = colliding_items.size(); i < n; ++i){
         if (dynamic_cast<GameObject*>(colliding_items.at(i))) {
             qDebug() << "npc detected";
             setImmobile();
-            delete rect;
             GameObject * npc = dynamic_cast<GameObject*>(colliding_items.at(i));
             npc->interact();
             return;
@@ -249,8 +252,6 @@ void Player::keyPressEvent(QKeyEvent *event){
 //        }
     }
 
-    delete rect;
-
     if (isMovable) {
         setPos(newPos);
         if (game->scene->width() > 800) {
@@ -265,5 +266,12 @@ void Player::keyPressEvent(QKeyEvent *event){
 void Player::keyReleaseEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Space && phones_on) {
         phones_on = false;
+        setMovable();
     }
+}
+
+void Player::shot() {
+    if (x() - 100 > 0) {
+        setPos(x()-100, y());
+    } else setPos(0, y());
 }
