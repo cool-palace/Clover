@@ -91,10 +91,6 @@ BugBossBuzz::~BugBossBuzz() {
     delete timer;
 };
 
-void BugBoss::interact() {
-
-}
-
 void BugBossBuzz::move(){
     int step = -15;
 

@@ -2,6 +2,7 @@
 #include "button.h"
 #include <QKeyEvent>
 #include <QGraphicsTextItem>
+#include <QDebug>
 
 Game::Game(QWidget* parent)
 {
@@ -26,74 +27,11 @@ Game::Game(QWidget* parent)
 //    music->addMedia(QUrl("qrc:/sounds/sunken_heart.mp3"));
 //    music->addMedia(QUrl("qrc:/sounds/empty_world.mp3"));
 //    music->addMedia(QUrl("qrc:/sounds/witch_fight.mp3"));
-//    music->addMedia(QUrl("qrc:/sounds/deadman_revived.mp3"));
+//    music->addMedia(QUrl("qrc:/sounds/gardener_revived.mp3"));
 //    music->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
 
 //    current_music = new QMediaPlayer();
 //    current_music->setPlaylist(music);
-}
-
-void Game::start(){
-
-//    if (progress == DEADMANS_FAREWELL) {
-//        progress = START;
-//    }
-
-//    if (progress == START) {
-//        current_music->stop();
-//    } else {
-//        music->setCurrentIndex(1);
-//        current_music->setVolume(50);
-//        current_music->play();
-//    }
-
-    // clear the screen
-    scene->clear();
-    setBackgroundBrush(QBrush(QImage(":/images/cave-bg.png")));
-    scene->setSceneRect(0,0,800,600);
-    setSceneRect(0,0,800,600);
-    currentViewPos = {0, 0};
-
-    // create the dead man
-//    deadman = new Deadman();
-//    int dxPos = scene->width()/2 - deadman->boundingRect().width()/2*deadman->scale();
-//    int dyPos = 100;
-//    deadman->setPos(dxPos, dyPos);
-//    scene->addItem(deadman);
-
-    // create a dialog box
-    dialogbox = new DialogBox();
-    dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
-    scene->addItem(dialogbox);
-
-    // create an exit
-//    exit = new Exit();
-//    int exPos = scene->width()/2 - exit->boundingRect().width()/2;
-//    int eyPos = scene->height() - exit->boundingRect().height();
-//    exit->setPos(exPos, eyPos);
-//    if (progress == START || progress == OUTSIDE_EMPTINESS_DISCOVERED) {
-//        exit->hide();
-//    } else exit->show();
-//    scene->addItem(exit);
-
-    // create the player
-    player = new Player();
-    int pxPos = scene->width()/2 - player->boundingRect().width()*player->scale()/2;
-    int pyPos;
-    if (progress == START) {
-        pyPos = scene->height()/2 - player->boundingRect().height()*player->scale()/2;
-    } else pyPos = 450;
-    player->setPos(pxPos,pyPos);
-    // make the player focusable and set it to be the current focus
-    player->setMovable();
-    player->setFlag(QGraphicsItem::ItemIsFocusable);
-    player->setFocus();
-    scene->addItem(player);
-
-    connect(player,SIGNAL(dialogCall(int, int)),dialogbox,SLOT(getBox(int, int)));
-    connect(player,SIGNAL(goingOut()),this,SLOT(outside()));
-
-    show();
 }
 
 void Game::displayMainMenu(){
@@ -127,19 +65,16 @@ void Game::displayMainMenu(){
     scene->addItem(titleText);
 
     // create the play button
-
-//    if (progress != DEADMANS_FAREWELL) {
-        Button* playButton = new Button(QString("Читать"));
-//    } else {
-//        playButton = new Button(QString("Заново"));
-//    }
+    Button* playButton;
+    if (progress != CLOVER_QUEST_COMPLETE) {
+        playButton = new Button(QString("Играть"));
+    } else {
+        playButton = new Button(QString("Заново"));
+    }
     int bxPos = this->width()/2 - playButton->boundingRect().width()/2;
     int byPos = 275;
     playButton->setPos(bxPos,byPos);
-//    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
-//    connect(playButton,SIGNAL(clicked()),this,SLOT(phones_game()));
-    connect(playButton,SIGNAL(clicked()),this,SLOT(bug_fight()));
-//    connect(playButton,SIGNAL(clicked()),this,SLOT(drink_game()));
+    connect(playButton,SIGNAL(clicked()),this,SLOT(start()));
     scene->addItem(playButton);
 
     // create the quit button
@@ -150,86 +85,97 @@ void Game::displayMainMenu(){
     connect(quitButton,SIGNAL(clicked()),this,SLOT(close()));
     scene->addItem(quitButton);
 
-//    if (progress == DEADMANS_FAREWELL) {
-//        lastButton = new Button(QString("Клад"));
-//        int lxPos = this->width()/2 - quitButton->boundingRect().width()/2;
-//        int lyPos = 425;
-//        lastButton->setPos(lxPos,lyPos);
-//        connect(lastButton,SIGNAL(clicked()),this,SLOT(deadmans_note()));
-//        scene->addItem(lastButton);
-//    }
 }
 
-void Game::outside() {
-
-//    if (progress != FIFTH_RIDDLE_SOLVED) {
-//        music->setCurrentIndex(2);
-//        current_music->play();
-//    } else {
-//        music->setCurrentIndex(7);
-//        current_music->setVolume(50);
-//        current_music->play();
-//    }
-
-    // clear the screen
+void Game::init() {
     scene->clear();
-    setBackgroundBrush(QBrush(QImage(":/images/bg-big.png")));
-    scene->setSceneRect(0,0,worldSize,worldSize);
-    setSceneRect(980,0,800,600);
-    currentViewPos = {980, 0};
+    scene->setSceneRect(0,0,800,600);
+    setSceneRect(0,0,800,600);
 
-    // create the cave
-//    cave = new Cave();
-//    int cxPos = scene->width()/2 - cave->boundingRect().width()*cave->scale()/2;
-//    int cyPos = 0;
-//    cave->setPos(cxPos, cyPos);
-//    entrance = new Entrance(cave);
-//    entrance->setPos(127,195);
-//    scene->addItem(cave);
-
-    // create a dialog box
     dialogbox = new DialogBox();
     dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
     scene->addItem(dialogbox);
 
-    // create the player
     player = new Player();
-    int pxPos = scene->width()/2 - player->boundingRect().width()*player->scale()/2;
-    int pyPos = height()/2 - player->boundingRect().height()*player->scale()/2;
-    player->setPos(pxPos,pyPos);
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
+    int pxPos = 0;
+    int pyPos = height()/2 - player->boundingRect().height()*player->scale()/2;
+    player->setPos(pxPos,pyPos);
     scene->addItem(player);
     connect(player,SIGNAL(dialogCall(int, int)),dialogbox,SLOT(getBox(int, int)));
-    connect(player,SIGNAL(goingIn()),this,SLOT(start()));
 
+    passage = new Passage();
+    connect(passage,SIGNAL(game_advance()),this,SLOT(outside()));
+    scene->addItem(passage);
+}
+
+void Game::start(){
+    init();
+    setBackgroundBrush(QBrush(QImage(":/images/bg-start.png")));
+
+    player->setPos(scene->width()/2-player->boundingRect().width()/2, scene->height()/2-player->boundingRect().height()/2);
+
+    gardener = new Gardener();
+    gardener->setPos(scene->width()*2/5-gardener->boundingRect().width()/2, scene->height()/2-gardener->boundingRect().height()/2);
+    scene->addItem(gardener);
+
+    player->setPixmap(QPixmap(":/images/player-left.png"));
+    player->set_direction(Player::directions::LEFT);
+
+    switch (progress) {
+    case START:
+        setBackgroundBrush(QBrush(Qt::black));
+        passage->hide();
+        gardener->hide();
+        dialogbox->getBox(gardenerSeqStart,gardenerSeqStart+4);
+        break;
+    case ENERGY_DRINKS_GAME_COMPLETE: case BUGS_DEFEATED:
+        setBackgroundBrush(QBrush(QImage(":/images/bg-start.png")));
+        passage->setPixmap(QPixmap(":/images/passage-1.png"));
+    default:
+        setBackgroundBrush(QBrush(QImage(":/images/bg-start.png")));
+        break;
+    }
     show();
 }
 
+void Game::outside() {
+    init();
+    switch (progress) {
+    case INTRO_COMPLETE: case PHONES_GAME_STARTED:
+        phones_game();
+        break;
+    case PHONES_GAME_COMPLETE:
+        mice_meeting();
+        break;
+    case ENERGY_DRINKS_GAME_COMPLETE:
+        bug_fight();
+        break;
+    case BUGS_DEFEATED:
+        clover_search();
+        break;
+    case CLOVER_QUEST_COMPLETE:
+        displayMainMenu();
+        break;
+    default:
+        break;
+    }
+}
+
 void Game::phones_game() {
-    scene->clear();
     QString str = ":/images/bg-buzz-%1.png";
     setBackgroundBrush(QBrush(QImage(str.arg(Buzz::current_level()))));
-    scene->setSceneRect(0,0,800,600);
-    setSceneRect(0,0,800,600);
 
 //    music->setCurrentIndex(4);
 //    current_music->setVolume(10);
 //    current_music->play();
 
-    // create a dialog box
-    dialogbox = new DialogBox();
-    dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
-    scene->addItem(dialogbox);
-
-    player = new Player();
-    int pxPos = Buzz::current_level() < 3 ? 0 : scene->width()/2 - player->boundingRect().width()*player->scale()/2;
-    int pyPos = Buzz::current_level() < 3 ? height()/2 - player->boundingRect().height()*player->scale()/2 : 0;
-    player->setPos(pxPos,pyPos);
-    player->setFlag(QGraphicsItem::ItemIsFocusable);
-    player->setFocus();
-    scene->addItem(player);
-    connect(player,SIGNAL(dialogCall(int, int)),dialogbox,SLOT(getBox(int, int)));
+    if (Buzz::current_level() == 3) {
+        int pxPos = scene->width()/2 - player->boundingRect().width()*player->scale()/2;
+        int pyPos = 0;
+        player->setPos(pxPos,pyPos);
+    }
 
     Buzz * buzz[3];
     for (int i = 0; i < 3; ++i) {
@@ -237,68 +183,85 @@ void Game::phones_game() {
         buzz[i] = new Buzz(i);
         scene->addItem(buzz[i]);
     }
+    if (Buzz::current_level() > 1) {
+        dialogbox->getBox(phonesSeqStart+Buzz::current_level(), phonesSeqStart+Buzz::current_level());
+    }
 
-    Passage * passage = new Passage(Buzz::current_level());
-    scene->addItem(passage);
-    connect(passage,SIGNAL(phone_game_advance()),this,SLOT(phones_game()));
-    connect(passage,SIGNAL(phone_game_end()),this,SLOT(displayMainMenu()));
-//    buzz->setPos(scene->width()/2, scene->height()/2);
-//    connect(phonesgame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
     show();
 }
 
+void Game::mice_meeting() {
+    setBackgroundBrush(QBrush(QImage(":/images/bg-buzz-1.png")));
+
+    Mice * mice = new Mice();
+    scene->addItem(mice);
+
+    dialogbox->getBox(preMiceSeqStart, preMiceSeqStart+3);
+    passage->hide();
+}
+
 void Game::drink_game() {
-//    scene->setSceneRect(0,0,800,600);
-//    setSceneRect(0,0,800,600);
 
 //    music->setCurrentIndex(4);
 //    current_music->setVolume(10);
 //    current_music->play();
 
-    // create a dialog box
-    dialogbox = new DialogBox();
-    dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
-
-    DrinkGame * drinkgame = new DrinkGame();
-    scene->addItem(drinkgame);
-    scene->addItem(dialogbox);
-
+    drinkgame = new DrinkGame();
     connect(drinkgame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
+    scene->addItem(drinkgame);
+
     show();
 }
 
 void Game::bug_fight() {
-//    scene->setSceneRect(0,0,800,600);
-//    setSceneRect(0,0,800,600);
-    scene->clear();
     setBackgroundBrush(QBrush(QImage(":/images/bg-fight.png")));
 
 //    music->setCurrentIndex(4);
 //    current_music->setVolume(10);
 //    current_music->play();
 
-    // create a dialog box
-    dialogbox = new DialogBox();
-    dialogbox->setFlag(QGraphicsItem::ItemIsFocusable);
-    scene->addItem(dialogbox);
-
-    player = new Player();
-    player->setPixmap(QPixmap(":/images/player-right.png"));
-    int pxPos = 0;
-    int pyPos = height()/2 - player->boundingRect().height()*player->scale()/2;
-    player->setPos(pxPos,pyPos);
-    player->setFlag(QGraphicsItem::ItemIsFocusable);
-    player->setFocus();
-    scene->addItem(player);
-    connect(player,SIGNAL(dialogCall(int, int)),dialogbox,SLOT(getBox(int, int)));
-
     for (int i = 0; i < 5; ++i) {
         bug[i] = new Bug();
-        bug[i]->setPos(rand()%500+300, rand()%500);
+        bug[i]->setPos(rand()%500+300, rand()%400);
         scene->addItem(bug[i]);
     }
 
-    dialogbox->getBox(bugFightStart,bugFightStart);
+    passage->hide();
+
+    dialogbox->getBox(bugFightStart,bugFightStart+4);
+    show();
+}
+
+void Game::clover_search() {
+    setBackgroundBrush(QBrush(QImage(":/images/bg-field-fence.png")));
+
+//    music->setCurrentIndex(4);
+//    current_music->setVolume(10);
+//    current_music->play();
+
+    Flower * flower[14];
+    for (int i = 0; i < 14; ++i) {
+        flower[i] = new Flower(i);
+        scene->addItem(flower[i]);
+        if (i > 0) connect(flower[i-1],SIGNAL(show_next()),flower[i],SLOT(appear()));
+        if (i == 13) clover = flower[i];
+    }
+
+    passage->hide();
+
+    dialogbox->getBox(cloverSeqStart,cloverSeqStart+4);
+    show();
+}
+
+void Game::clover_game() {
+    //    music->setCurrentIndex(4);
+    //    current_music->setVolume(10);
+    //    current_music->play();
+
+    clovergame = new CloverGame();
+    connect(clovergame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
+    scene->addItem(clovergame);
+
     show();
 }
 
@@ -311,50 +274,133 @@ void Game::save() {
     }
 }
 
-//const QVector<Riddle> Game::riddles = {
-//    {"Две средние цифры года твоего рождения, повторённые дважды.", "0000"},
-//    {"Средние две цифры — это последние цифры твоего предыдущего номера телефона, а цифры по краям их дублируют.", "4499"},
-//    {"Первая цифра — номер дня недели,<br>в который ты получила эту открытку,<br>"
-//      "а последние две — номер твоего дома.", "324"},
-//    {"Для каждой буквы из своего имени<br>возьми их порядковые номера в алфавите и сложи их все вместе. В полученной сумме поменяй цифры местами.", "67"},
-//    {"Две средние цифры из твоего почтового индекса и две последние цифры из номера твоей медкнижки.", "2515"}
-
-//    };
-
 const QVector<Speechline> Game::speech = {
-    {":/images/player.png", "Где я?.."}, //0//
-    {":/images/player.png", "Последнее, что я помню — это букет и та странная открытка.<br>Я открыла её, а дальше... Как я здесь оказалась?"},
-    {":/images/player.png", "Здесь так темно и пусто... <br>Только чёрные стены и кучка земли..."},
-    {":/images/player.png", "Надо осмотреться, может быть, получится найти выход."}, // +3
-    {":/images/player-fear.png", "ААА!!! МЕРТВЕЦ!"}, // +4
-    {":/images/deadman.png", "..."},
-    {":/images/player-fear.png", "СПАСИТЕ!!!"},
-    {":/images/deadman-uneasy.png", "Эм..."},
-    {":/images/deadman-uneasy.png", "Успокойся, пожалуйста. Я тебя не съем."},
-    {":/images/player-frown.png", "Ты кто?! Что это за место?! Как мне попасть домой?"},
-    {":/images/deadman.png", "Это немного другой мир.<br>Если ты попала сюда, то вернуться домой будет сложно."},
-    {":/images/player-frown.png", "Это ты меня здесь запер?!"},
-    {":/images/deadman-uneasy.png", "Нет, ты чего... Я и сам заперт здесь.<br>Меня заколдовали давным-давно."},
-    {":/images/player.png", "Заколдовали?"},
-    {":/images/deadman.png", "Да... После этого я и стал выглядеть так...<br>Если не поторопиться, то ты тоже можешь превратиться здесь в кого-то."},
-    {":/images/player.png", "В смысле, превратиться? В кого?"},
-    {":/images/deadman.png", "Не знаю, как получится. В бабайку или что-то такое."},
-    {":/images/player-fear.png", "И что мне теперь делать? Я не хочу быть бабайкой!<br>Я хочу домой!"},
-    {":/images/deadman.png", "Я же говорю, это не так просто, иначе я бы сам здесь не сидел. Можно попробовать один способ, конечно, но придётся потрудиться. И я не совсем уверен, что сработает..."},
-    {":/images/player-frown.png", "Ну же, расскажи скорее!"},
-    {":/images/deadman.png", "Недавно я нашёл старую книгу с заклинаниями, и там было то, которое может нам помочь и открыть дверь обратно в настоящий мир."},
-    {":/images/player-frown.png", "Так давай скорее его используем!"},
-    {":/images/deadman.png", "Проблема в том, что в книге оно неполное. Чтобы закончить его, надо собрать <b>пять ключей</b>."},
-    {":/images/player.png", "А где их найти? И что это за ключи вообще?"},
-    {":/images/deadman.png", "Я знаю только то, они спрятаны в брикетах волшебного мела."},
-    {":/images/player-annoyed.png", "Что за бред..."},
-    {":/images/deadman-uneasy.png", "Звучит глупо, но так было написано в книге..."},
-    {":/images/deadman.png", "Можешь мне не верить, но лучше попробовать их найти, пока есть время. Если ты превратишься в бабайку, пути назад не будет."},
-    {":/images/player-annoyed.png", "<i>Ничего не поделаешь, придётся попытаться.</i>"},
-    {":/images/player.png", "Ладно, но где мне искать эти ключи?"},
-    {":/images/deadman.png", "Вот здесь, снизу, есть выход, попробуй посмотреть снаружи."}, //+30
+    {":/images/player.png", "Так темно..."}, // 0
+    {":/images/player.png", "Почему так темно?"},
+    {":/images/player.png", "Что со мной?"},
+    {":/images/gardener.png", "Кто это здесь?"},
+    {":/images/gardener.png", "Девочка, проснись!"},
+    {":/images/player.png", "А? Где это я? И кто ты?"}, // +5
+    {":/images/gardener.png", "Я пришёл поработать немного у себя в саду, но нашёл здесь тебя спящей. Как ты здесь оказалась?"},
+    {":/images/player.png", "Я не знаю..."},
+    {":/images/player.png", "В последнее время у меня всё идёт не по плану,<br>и вот теперь это..."},
+    {":/images/gardener.png", "Всё не по плану, говоришь?.."},
+    {":/images/player.png", "Как будто не везёт постоянно."},
+    {":/images/gardener.png", "Значит, тебе просто нужно немного удачи?"},
+    {":/images/player.png", "Не помешало бы. Но вообще, как мне попасть домой?"},
+    {":/images/gardener.png", "Можно сказать, в этот раз тебе всё-таки повезло.<br>Жёлтая дорожка ведёт к выходу, он довольно недалеко, а по пути ты можешь найти кое-что, что должно тебе помочь."},
+    {":/images/player.png", "Что-то, что должно мне помочь? В каком смысле?"},
+    {":/images/gardener.png", "Там будет небольшая клумба, где растут клеверы.<br>Если тебе повезёт, то ты сможешь найти четырёхлистник,<br>а они приносят удачу."},
+    {":/images/player.png", "Они же очень редкие, возможно, что такого там даже не будет. Почему ты думаешь, что я его найду?"},
+    {":/images/gardener.png", "Ну, в конце концов, это волшебный сад.<br>Я думаю, если ты здесь появилась, то обязательно найдёшь свой четырёхлистный клевер."},
+    {":/images/player.png", "<i>Да уж, чтобы клеверы на клумбе росли...<br>Точно волшебный сад...</i>"},
+    {":/images/gardener.png", "Ну, это пока просто хобби, и я не так много времени ему уделяю, как хотел бы..."},
+    {":/images/gardener.png", "Постой. Есть одна сложность, я забыл тебе сказать."},
+    {":/images/player.png", "Какая?"},
+    {":/images/gardener.png", "Как ты относишься к насекомым?"},
+    {":/images/player.png", "Ужасно! Я панически их боюсь!"},
+    {":/images/gardener.png", "Беда... Я давно здесь не был, и их тут развелось довольно много... Придётся идти мимо них."},
+    {":/images/player.png", "А другого пути нет?"},
+    {":/images/gardener.png", "Это самый короткий. Не бойся, что-нибудь придумаем.<br>Они не должны тебя трогать, но жужжат громко и могут сбить с толку. С учётом того, что ты их не переносишь, пройти будет сложно..."},
+    {":/images/gardener.png", "Я придумал! Вот, возьми наушники, чтобы их жужжание тебе не мешало. Заодно я смогу связываться с тобой по пути, очень удобно."},
+    {":/images/player.png", "Хорошо. Постой..."},
+    {":/images/player.png", "Это же строительные..."},
+    {":/images/gardener.png", "Да, защищают от шума лучше всего."},
+    {":/images/player.png", "Как ты через них связываться собрался?"},
+    {":/images/gardener.png", "..."},
+    {":/images/gardener.png", "Ну, в любом случае стоит попробовать."},
+    {":/images/gardener.png", "Запомни: когда видишь, что звуковая волна приближается<br>к тебе, нажми ПРОБЕЛ и наушники тебя защитят. Если не успеешь, то не сможешь пройти дальше."},
+    {":/images/gardener.png", "Если готова, то попробуй пройти дальше по дороге,<br>посмотри, что там."}, //+35
 
-    {":/images/bug.png", "Сдавайся!"}, //+30
-    {":/images/player.png", "Я победила!"},
+    {":/images/player.png", "Значит, наушники можно надевать пробелом... Попробуем."}, // phones
+    {":/images/gardener.png", "Удачи!"},
+    {":/images/gardener.png", "Молодец, отлично справляешься!"},
+    {":/images/gardener.png", "Кажется, здесь немного посложнее, но у тебя получится."},
 
+    {":/images/gardener.png", "Отлично, похоже, ты прошла."}, // pre-Mice
+    {":/images/player.png", "Наконец-то жуки закончились. Я уже немного устала..."},
+    {":/images/player.png", "Стой, что это за странная компания тут?"},
+    {":/images/player.png", "Наверно, надо уточнить у них дорогу."}, // +3
+
+    {":/images/mouse-1.png", "Я тебе говорю, этот лучше!"}, // mice
+    {":/images/mouse-2.png", "Ты чего, он же вообще отстой!"},
+    {":/images/player.png", "Привет, вы не знаете, тут можно по дороге пройти?<br>Впереди нет жуков?"},
+    {":/images/mouse-1.png", "А? Там самое их гнездо. Просто так не пройдёшь."},
+    {":/images/mouse-2.png", "Если тебе нужно вперёд, придётся их победить."},
+    {":/images/player.png", "Победить? У меня совсем нет сил, чтобы драться...<br>Тем более, с этими жуками..."},
+    {":/images/mouse-1.png", "Если нет сил, значит, просто нужно зарядиться!"},
+    {":/images/mouse-1.png", "У нас как раз 5 банок, так что одной можем поделиться."},
+    {":/images/player.png", "Вы о чём?"},
+    {":/images/mouse-1.png", "Мы долго спорим, какой из этих энергосов вкуснее,<br>и никак не можем прийти к общему решению."},
+    {":/images/mouse-1.png", "Попробуй их и рассуди нас, а мы отдадим тебе лучший."},
+    {":/images/mouse-1.png", "Тогда и жуков легко одолеешь."},
+    {":/images/player.png", "Пробовать энергосы? Это я умею, давайте!"}, // +12
+
+    {":/images/player.png", "Вроде вкусно, но надо сравнить..."}, // energy
+    {":/images/player-sad.png", "Самое отвратительное из энергетиков<br>в моей жизни сквозь года."}, // разница вкусов -4
+    {":/images/player-annoyed.png", "По сравнению с тем – отстой полный!"},
+    {":/images/player.png", "Пить можно, но не нужно.<br>Предыдущий мне понравился больше."},
+    {":/images/player.png", "Как предыдущий, только с менее насыщенным вкусом.<br>В целом хорошо."},
+    {":/images/player.png", "Вкус такой же. Надо попробовать другие."},   // разница вкусов 0
+    {":/images/player.png", "Сладко, но достаточно вкусненько.<br>Этот мне нравится немного больше."},
+    {":/images/player.png", "На вкус как тот, только меньше сахара. Огонь!"},
+    {":/images/player-smile.png", "Что-то похожее по вкусу на предыдущий, НО ЛУЧШЕ.<br>И очень газированно!"},
+    {":/images/player-smile.png", "Ребята, ребята, это не учебная тревога!<br>Найден невероятно вкусный энергетик!"},
+    {":/images/mouse-1.png", "Похоже, ты ещё не расположила все энергосы по местам."}, //
+    {":/images/mouse-1.png", "На каждом месте должно быть не больше одной банки."},
+    {":/images/mouse-1.png", "Распробуй энергосы получше, пока кажется, что что-то не совсем правильно."}, //
+    {":/images/mouse-1.png", "Всё правильно!"}, //
+    {":/images/mouse-1.png", "Спасибо за помощь! Возьми баночку в награду и выпей, чтобы набраться сил."},
+    {":/images/player.png", "С учётом того, сколько пришлось перепробовать, силы уже начинают ощущаться. Хотя, сейчас не помешает ещё."}, //+15
+
+    {":/images/bug.png", "Сдавайся! Ты не пройдёшь дальше!"}, // bugs
+    {":/images/gardener.png", "Похоже, одними наушниками уже не обойдёшься.<br>В этот раз попробуй стрелять в жуков с помощью пробела."},
+    {":/images/gardener.png", "Энергии теперь тебе должно хватить."},
+    {":/images/player.png", "Я и правда чувствую прилив сил, но стрелять? Чем?"},
+    {":/images/player.png", "Видимо, придётся просто попробовать. Пробел, да?"},
+
+    {":/images/bug-boss.png", "Ты победила моих слуг, но я не позволю тебе пройти дальше."}, //+5
+    {":/images/player.png", "Заюш, ты лучше уйди, а то и тебя застрелю."},
+    {":/images/bug-boss.png", "Убирайся! Это моя территория!"}, // +7
+    {":/images/bug-boss.png", "Похоже, надо искать другое место..."},
+    {":/images/player.png", "Фух... Я в самом деле победила!"},
+    {":/images/gardener.png", "Отличная работа! Теперь вперёд, клумба прямо перед тобой."},
+
+    {":/images/player.png", "Вот это клумба... Целый один цветочек."},
+    {":/images/player.png", "Совсем ты за своим садом не ухаживал. Не то что четырёхлистника, даже обычных клеверов не видно."},
+    {":/images/player.png", "И как тут можно искать что-то?"},
+    {":/images/gardener.png", "Не торопи события. Почему бы тебе для начала не посмотреть поближе на этот цветок?"},
+    {":/images/player.png", "Что ж, ну ладно. Больше тут и не на что смотреть."},
+
+    {":/images/player.png", "Тут цифра выпала. Что это значит?"},
+    {":/images/gardener.png", "Возможно, цветы хотят что-то тебе сказать. Видишь следующий?"},
+    {":/images/player.png", "Да, попробую проверить его тоже."},
+
+    {":/images/player.png", "Сплошные нули. Так и должно быть?"},
+    {":/images/player.png", "И этот тоже..."},
+    {":/images/player.png", "Наконец-то что-то больше нуля! Интересно, что это за цифры?"},
+    {":/images/player.png", "Какая-то извилистая дорога получается.<br>Любопытно, куда эти цветы меня ведут?"},
+    {":/images/player.png", "Это что? Неужели?.."},
+    {":/images/player.png", "Четырёхлистный клевер..."},
+    {":/images/player.png", "Понятно, эти цветы показывали мне дорогу к нему.<br>Только что всё-таки означают цифры?"},
+    {":/images/gardener.png", "Попробуй записать их в том порядке, в котором ты их проходила.<br>Кто знает, вдруг это пригодится."},
+    {":/images/player.png", "Ладно... Глядя на свой путь, наверно, уже не запутаюсь.<br>Может быть, сделать скриншот на всякий случай тоже будет полезно."},
+    {":/images/gardener.png", "Ты уже рассмотрела клевер? Приглядись к нему тоже."},
+    {":/images/player.png", "Сейчас, посмотрю..."},
+
+    {":/images/player.png", "Что это? У него на листьях тоже что-то есть!"},
+    {":/images/gardener.png", "У клевера есть свои секреты. Говорят, он приносит удачу, но вполне возможно, что эта удача может быть также и в виде некого талисмана."},
+    {":/images/gardener.png", "Если ты разгадаешь его загадку, то обязательно случится что-то интересное."},
+    {":/images/gardener.png", "Молодец, у тебя получилось! Запомни эти цифры, начиная от стебелька и по часовой стрелке. Это должно быть очень важно."},
+
+    {":/images/gardener.png", "Теперь ты наконец можешь вернуться домой, выход впереди."},
+    {":/images/player.png", "А как же все эти цифры? Что в итоге делать с ними?"},
+    {":/images/gardener.png", "Я уверен, что если ты всё записала верно, то они пригодятся тебе впереди."},
+    {":/images/gardener.png", "К примеру, ты когда-нибудь проходила какие-либо странные спонтанные квесты?"},
+    {":/images/player.png", "Странные квесты?.. Было дело, но это довольно давно..."},
+    {":/images/gardener.png", "Я практически уверен, что можно попробовать проверить эти цифры в том месте,<br>где ты была в прошлый раз."},
+    {":/images/player.png", "Хорошо... Я постараюсь проверить."},
+    {":/images/gardener.png", "Пока ты не ушла, не забудь взять и сам клевер с собой. Будем считать, что это мой маленький подарок для тебя. И, кстати, с днём рождения)"},
+    {":/images/gardener.png", "Возможно, ещё увидимся)"},
+    {":/images/player.png", "Спасибо... Надеюсь, что так."},
 };

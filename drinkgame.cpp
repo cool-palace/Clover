@@ -1,4 +1,5 @@
 #include "drinkgame.h"
+#include "game.h"
 
 extern Game * game;
 
@@ -24,6 +25,7 @@ Drink::Drink(int id, QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(pa
         break;
     }
     setAcceptHoverEvents(true);
+    setZValue(10);
 }
 
 int Drink::last_taste = 0;
@@ -50,10 +52,10 @@ void Drink::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void Drink::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
     if (last_taste == 0) {
-//        emit degustation(Game::kalinaSeqStart+7,Game::kalinaSeqStart+7);
+        emit degustation(Game::energySeqStart,Game::energySeqStart);
     } else {
         int taste_diff = drink_taste - last_taste;
-//        emit degustation(taste_diff+Game::kalinaSeqStart+12,taste_diff+Game::kalinaSeqStart+12);
+        emit degustation(taste_diff+Game::energySeqStart+5,taste_diff+Game::energySeqStart+5);
     }
     last_taste = drink_taste;
 }
@@ -69,6 +71,7 @@ void Drink::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
 DrinkGame::DrinkGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
 {
     setPixmap(QPixmap(":/images/bg.jpg"));
+    setZValue(3);
 
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(QColor(255,174,201,150));
@@ -96,7 +99,6 @@ DrinkGame::DrinkGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(par
         int offset = 120;
         drinks[i] = new Drink(i, this);
         drinks[i]->setPos(i*120+offset,150);
-        drinks[i]->setZValue(10);
 
         offset = 40;
         drink_slots[i] = new QGraphicsRectItem(this);
@@ -153,11 +155,11 @@ void DrinkGame::checkAnswer() {
             }
         }
         if (colliding_items.size() == 0) {
-//            emit result(Game::kalinaSeqStart+17,Game::kalinaSeqStart+17);
+            emit result(Game::energySeqStart+10,Game::energySeqStart+10);
             all_placed = false;
             return;
         } else if (colliding_items.size() > 1) {
-//            emit result(Game::kalinaSeqStart+18,Game::kalinaSeqStart+18);
+            emit result(Game::energySeqStart+11,Game::energySeqStart+11);
             all_placed = false;
             return;
         }
@@ -170,10 +172,10 @@ void DrinkGame::checkAnswer() {
             && drink_slots[2]->collidesWithItem(drinks[4])
             && drink_slots[3]->collidesWithItem(drinks[0])
             && drink_slots[4]->collidesWithItem(drinks[3])) {
-//        emit result(Game::kalinaSeqStart+20,Game::kalinaSeqStart+20);
+        emit result(Game::energySeqStart+13,Game::energySeqStart+13);
         correctSound->play();
         return;
     }
-//    emit result(Game::kalinaSeqStart+19,Game::kalinaSeqStart+19);
+    emit result(Game::energySeqStart+12,Game::energySeqStart+12);
     wrongSound->play();
 }

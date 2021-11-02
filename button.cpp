@@ -36,7 +36,6 @@ Button::Button(QString name, QGraphicsItem *parent): QGraphicsRectItem(parent){
 
 Button::~Button() {
     delete text;
-    qDebug() << "b";
 }
 
 void Button::mousePressEvent(QGraphicsSceneMouseEvent *event){

@@ -2,14 +2,13 @@
 #define DRINKGAME_H
 
 #include <QObject>
-#include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QBrush>
 #include <button.h>
 #include <QMediaPlayer>
 #include "QCursor"
 #include <QDebug>
-#include "game.h"
 
 class Drink : public QObject, public QGraphicsPixmapItem
 {

@@ -12,6 +12,7 @@ CONFIG += c++11
 SOURCES += \
     bullet.cpp \
     button.cpp \
+    clovergame.cpp \
     dialogbox.cpp \
     drinkgame.cpp \
     game.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
 HEADERS += \
     bullet.h \
     button.h \
+    clovergame.h \
     dialogbox.h \
     drinkgame.h \
     game.h \

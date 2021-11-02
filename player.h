@@ -26,6 +26,8 @@ public:
 public slots:
     void shot();
     void enable_shooting();
+    void disable_shooting();
+    void set_direction(directions);
 
 signals:
     void dialogCall(int start, int end);
@@ -38,7 +40,7 @@ private:
     bool isMovable = true;
     bool canShoot = false;
     bool phones_on = false;
-    directions direction = LEFT;
+    directions direction = RIGHT;
 
 };
 

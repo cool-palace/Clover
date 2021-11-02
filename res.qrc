@@ -5,8 +5,6 @@
         <file>player-left.png</file>
         <file>player-right.png</file>
         <file>bug.png</file>
-        <file>passage-1.png</file>
-        <file>passage-2.png</file>
         <file>drink-small-1.png</file>
         <file>drink-small-2.png</file>
         <file>drink-small-3.png</file>
@@ -23,5 +21,18 @@
         <file>bug-shot.png</file>
         <file>boss-hit.png</file>
         <file>boss-sprite.png</file>
+        <file>flower-1.png</file>
+        <file>flower-2.png</file>
+        <file>flower-3.png</file>
+        <file>flower-4.png</file>
+        <file>flower-5.png</file>
+        <file>passage-1.png</file>
+        <file>passage-2.png</file>
+        <file>gardener.png</file>
+        <file>passage-3.png</file>
+        <file>mice-sprite.png</file>
+        <file>flower-c.png</file>
+        <file>clover.png</file>
+        <file>bg-field-fence.png</file>
     </qresource>
 </RCC>

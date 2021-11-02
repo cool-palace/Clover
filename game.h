@@ -3,6 +3,8 @@
 
 #include <QGraphicsView>
 #include <QWidget>
+#include <QPen>
+#include <QPainter>
 #include <QGraphicsScene>
 #include <QMediaPlaylist>
 #include <QMediaPlayer>
@@ -11,6 +13,7 @@
 #include "dialogbox.h"
 #include "button.h"
 #include "drinkgame.h"
+#include "clovergame.h"
 //#include "riddlebox.h"
 #include <QVector>
 
@@ -26,26 +29,24 @@ public:
     // public attributes
     QGraphicsScene * scene;
     Player * player;
-//    Gardener * gardener;
+    Gardener * gardener;
+    Passage * passage;
     DialogBox * dialogbox;
-    QPointF currentViewPos = {0, 0};
-//    Exit * exit;
-//    Cave * cave;
-//    Entrance * entrance;
+    DrinkGame * drinkgame;
+    CloverGame * clovergame;
+    Flower* clover;
     Bug * bug[5];
-//    Witch * witch;
-
+    BugBoss * boss;
     QTimer * timer;
 
     enum Progress {
         START,
         INTRO_COMPLETE,
-        BUZZ_GAME_LEVEL_1,
-        BUZZ_GAME_LEVEL_2,
-        BUZZ_GAME_LEVEL_3,
-        PHONES_QUEST_COMPLETE,
-        ENERGY_DRINKS_QUEST_COMPLETE,
-        FLYES_DEFEATED,
+        PHONES_GAME_STARTED,
+        PHONES_GAME_COMPLETE,
+        ENERGY_DRINKS_GAME_COMPLETE,
+        BUGS_FIGHT_STARTED,
+        BUGS_DEFEATED,
         CLOVER_QUEST_COMPLETE
     };
 
@@ -57,15 +58,25 @@ public:
 
     constexpr static int worldSize = 2760;
 
-    constexpr static int deadmanSeq1Start = 0;
-    constexpr static int bugFightStart = 31;
+    constexpr static int gardenerSeqStart = 0;
+    constexpr static int phonesSeqStart = gardenerSeqStart + 36;
+    constexpr static int preMiceSeqStart = phonesSeqStart + 4;
+    constexpr static int miceSeqStart = preMiceSeqStart + 4;
+    constexpr static int energySeqStart = miceSeqStart + 13;
+    constexpr static int bugFightStart = energySeqStart + 16;
+    constexpr static int cloverSeqStart = bugFightStart + 11;
 
 public slots:
+    void init();
     void start();
     void outside();
+
     void phones_game();
+    void mice_meeting();
     void drink_game();
     void bug_fight();
+    void clover_search();
+    void clover_game();
     void displayMainMenu();
 };
 

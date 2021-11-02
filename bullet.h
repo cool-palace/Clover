@@ -46,7 +46,7 @@ signals:
 
 private:
     QTimer * timer;
-    const QVector<QString> buzzs = {"<i>бззз</i>", "<i>жжжж</i>", "<i>шшшш</i>"};
+    const QVector<QString> buzzs = {"<i>бззззз</i>", "<i>жжжжжж</i>", "<i>шшшшшш</i>"};
 
 };
 

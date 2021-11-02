@@ -10,10 +10,11 @@ int step = 24;
 
 Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent){
     // set graphic
-    setPixmap(QPixmap(":/images/player-left.png"));
+    setPixmap(QPixmap(":/images/player-right.png"));
     bulletSound = new QMediaPlayer();
     bulletSound->setMedia(QUrl("qrc:/sounds/bullet.wav"));
     bulletSound->setVolume(5);
+    setZValue(2);
 }
 
 Player::~Player() {
@@ -22,6 +23,10 @@ Player::~Player() {
 
 void Player::enable_shooting() {
     canShoot = true;
+}
+
+void Player::disable_shooting() {
+    canShoot = false;
 }
 
 void Player::setMovable() {
@@ -41,8 +46,7 @@ void Player::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_Space) {
         if (!canShoot) {
             phones_on = true;
-            setImmobile();
-        } else if (canShoot && Bullet::bullet_count < 10) {
+        } else if (Bullet::bullet_count < 10) {
             direction = RIGHT;
 
     //        if (bulletSound->state() == QMediaPlayer::PlayingState){
@@ -78,8 +82,7 @@ void Player::keyPressEvent(QKeyEvent *event){
     QPointF diff = {0, 0};
     if (event->key() == Qt::Key_Left || event->key() == Qt::Key_A) {
         if (direction != LEFT) {
-            setPixmap(QPixmap(":/images/player-left.png"));
-            direction = LEFT;
+            set_direction(LEFT);
         }
 
         if (x() > 0) {
@@ -90,8 +93,7 @@ void Player::keyPressEvent(QKeyEvent *event){
     }
     else if (event->key() == Qt::Key_Right || event->key() == Qt::Key_D){
         if (direction != RIGHT) {
-            setPixmap(QPixmap(":/images/player-right.png"));
-            direction = RIGHT;
+            set_direction(RIGHT);
         }
         if (x() < game->scene->width() - boundingRect().width()*scale()) {
             if (x()+step < game->scene->width() - boundingRect().width()*scale()) {
@@ -131,7 +133,7 @@ void Player::keyPressEvent(QKeyEvent *event){
     for (int i = 0; i < child_items.size(); ++i) {
         for (int j = 0; j < colliding_items.size(); ++j) {
             if (colliding_items.at(j) == child_items.value(i) || colliding_items.value(j) == this
-                    /*|| dynamic_cast<Bullet*>(colliding_items.value(i))*/) {
+                    || dynamic_cast<Bullet*>(colliding_items.value(i))) {
                 colliding_items.removeAt(j);
                 --j;
             }
@@ -140,125 +142,19 @@ void Player::keyPressEvent(QKeyEvent *event){
 
     for (int i = 0, n = colliding_items.size(); i < n; ++i){
         if (dynamic_cast<GameObject*>(colliding_items.at(i))) {
-            qDebug() << "npc detected";
-            setImmobile();
             GameObject * npc = dynamic_cast<GameObject*>(colliding_items.at(i));
-            npc->interact();
-            return;
+            // interact() returns false on passages
+            if (!npc->interact()) return;
         }
-
-//        if (dynamic_cast<Deadman*>(colliding_items.at(i))) {
-//            setImmobile();
-//            switch (game->progress) {
-//            case Game::START:
-//                game->deadman->setPixmap(QPixmap(":/images/deadman-sprite.png"));
-//                game->deadman->setPos(game->scene->width()/2 - game->deadman->boundingRect().width()/2, 100);
-//                emit dialogCall(Game::deadmanSeq1Start+4,Game::deadmanSeq1Start+30);
-//                break;
-//            case Game::DOG_QUEST_COMPLETE:
-//                emit dialogCall(Game::deadmanSeq2Start,Game::deadmanSeq2Start+4);
-//                break;
-//            case Game::UNICORN_QUEST_COMPLETE:
-//                emit dialogCall(Game::deadmanSeq3Start,Game::deadmanSeq3Start);
-//                break;
-//            case Game::DANCE_QUEST_COMPLETE:
-//                emit dialogCall(Game::deadmanSeq4Start,Game::deadmanSeq4Start);
-//                break;
-//            case Game::SNAKES_DEFEATED:
-//                emit dialogCall(Game::deadmanSeq5Start,Game::deadmanSeq5Start+9);
-//                break;
-//            case Game::TREE_QUEST_COMPLETE:
-//                emit dialogCall(Game::deadmanSeq6Start,Game::deadmanSeq6Start);
-//                break;
-//            case Game::PHILOPHOBE_QUEST_COMPLETE:
-//                emit dialogCall(Game::deadmanSeq7Start,Game::deadmanSeq7Start+1);
-//                break;
-//            case Game::WITCH_DEFEATED:
-//                emit dialogCall(Game::deadmanSeq8Start,Game::deadmanSeq8Start+16);
-//                break;
-//            }
-
-//        } else if (dynamic_cast<Entrance*>(colliding_items.at(i))) {
-//            if (game->progress == Game::DOG_QUEST_STARTED || game->progress == Game::SNAKE_FIGHT_STARTED
-//                    || game->progress == Game::FIFTH_RIDDLE_SOLVED) {
-//                setImmobile();
-//            } else  {
-//                emit goingIn();
-//                return;
-//            }
-
-//        } else if (dynamic_cast<Cave*>(colliding_items.at(i))) {
-//            setImmobile();
-
-//        } else if (dynamic_cast<Portal*>(colliding_items.at(i))) {
-//            if (game->progress == Game::FIFTH_RIDDLE_SOLVED) {
-//                setImmobile();
-//                emit dialogCall(Game::deadmanSeq7Start+3,Game::deadmanSeq7Start+25);
-//            } else if (game->progress == Game::WITCH_DEFEATED) {
-//                setImmobile();
-//            } else if (game->progress == Game::DEADMANS_FAREWELL) {
-//                game->displayMainMenu();
-//                return;
-//            }
-
-//        } else if (dynamic_cast<Kids*>(colliding_items.at(i))) {
-//            if (childItems().empty()) {
-//                setImmobile();
-//                emit dialogCall(Game::kidsSeqStart,Game::kidsSeqStart+10);
-//            }
-
-//        } else if (dynamic_cast<RedWhite*>(colliding_items.at(i))) {
-//            setImmobile();
-//            if (game->progress == Game::DOG_QUEST_STARTED) {
-//                emit dialogCall(Game::kidsSeqStart+16,Game::kidsSeqStart+17);
-//            }
-
-//        } else if (dynamic_cast<Unicorn*>(colliding_items.at(i))) {
-//            setImmobile();
-//            if (game->progress == Game::FIRST_RIDDLE_SOLVED) {
-//                emit dialogCall(Game::unicornSeqStart,Game::unicornSeqStart+3);
-//            }
-
-//        } else if (dynamic_cast<Couple*>(colliding_items.at(i))) {
-//            setImmobile();
-//            if (game->progress == Game::SECOND_RIDDLE_SOLVED) {
-//                emit dialogCall(Game::coupleSeqStart,Game::coupleSeqStart+7);
-//            }
-
-//        } else if (dynamic_cast<Snake*>(colliding_items.at(i))) {
-//            Snake * snake = dynamic_cast<Snake*>(colliding_items.at(i));
-//            if (!snake->moving && !snake->dead) {
-//                setImmobile();
-//                emit dialogCall(Game::snakeSeqStart,Game::snakeSeqStart+14);
-//            } else if (snake->dead) {
-//                emit dialogCall(Game::snakeSeqStart+16+snake->id,Game::snakeSeqStart+16+snake->id);
-//            }
-
-//        } else if (dynamic_cast<Tree*>(colliding_items.at(i))) {
-//            setImmobile();
-//            if (game->progress == Game::AFTER_SNAKES_DIALOG_OVER) {
-//                emit dialogCall(Game::kalinaSeqStart,Game::kalinaSeqStart+6);
-//            }
-
-//        } else if (dynamic_cast<Thinker*>(colliding_items.at(i))) {
-//            setImmobile();
-//            if (game->progress == Game::FOURTH_RIDDLE_SOLVED) {
-//                emit dialogCall(Game::thinkerSeqStart,Game::thinkerSeqStart+10);
-//            }
-
-//        } else if (dynamic_cast<Exit*>(colliding_items.at(i))) {
-//            emit goingOut();
-//            return;
-//        }
     }
 
-    if (isMovable) {
+    if (isMovable && !phones_on) {
         setPos(newPos);
-        if (game->scene->width() > 800) {
-            game->currentViewPos += diff;
-            QRectF newView = {game->currentViewPos.x(),game->currentViewPos.y(),800,600};
-            game->setSceneRect(newView);
-        }
+//        if (game->scene->width() > 800) {
+//            game->currentViewPos += diff;
+//            QRectF newView = {game->currentViewPos.x(),game->currentViewPos.y(),800,600};
+//            game->setSceneRect(newView);
+//        }
     }
 
 }
@@ -275,3 +171,14 @@ void Player::shot() {
         setPos(x()-100, y());
     } else setPos(0, y());
 }
+
+void Player::set_direction(directions dir) {
+    direction = dir;
+    if (dir == LEFT) {
+        setPixmap(QPixmap(":/images/player-left.png"));
+    } else if (dir == RIGHT) {
+        setPixmap(QPixmap(":/images/player-right.png"));
+    }
+
+}
+
