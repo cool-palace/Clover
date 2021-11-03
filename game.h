@@ -38,6 +38,8 @@ public:
     Bug * bug[5];
     BugBoss * boss;
     QTimer * timer;
+    QMediaPlaylist * music;
+    QMediaPlayer * current_music;
 
     enum Progress {
         START,
@@ -65,6 +67,7 @@ public:
     constexpr static int energySeqStart = miceSeqStart + 13;
     constexpr static int bugFightStart = energySeqStart + 16;
     constexpr static int cloverSeqStart = bugFightStart + 11;
+    constexpr static int help = cloverSeqStart + 38;
 
 public slots:
     void init();

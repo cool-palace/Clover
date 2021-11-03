@@ -166,7 +166,7 @@ void BugBoss::recover() {
 }
 
 Buzz::Buzz(int id, QGraphicsItem *parent) : GameObject(parent) {
-    setPixmap(QPixmap(":/images/bug.png"));
+    setPixmap(QPixmap(":/images/bug-buzz.png"));
 
     QVector<QPointF> points = {{game->scene->width()/2, 100}, {game->scene->width()/2, 500 - boundingRect().height()},
                               {game->scene->width()/2, 100}, {200, 500 - boundingRect().height()},
@@ -338,38 +338,17 @@ void Flower::show_path() {
 }
 
 Gardener::Gardener(QGraphicsItem *parent) : GameObject(parent) {
-    setPixmap(QPixmap(":/images/gardener.png"));
+    setPixmap(QPixmap(":/images/gardener-sprite.png"));
 }
 
 bool Gardener::interact() {
     game->player->setImmobile();
     switch (game->progress) {
-    case Game::START:
-//        game->deadman->setPixmap(QPixmap(":/images/deadman-sprite.png"));
-//        game->deadman->setPos(game->scene->width()/2 - game->deadman->boundingRect().width()/2, 100);
-
-
-
-        //Исправить
-        game->dialogbox->getBox(Game::gardenerSeqStart+4,Game::gardenerSeqStart+5);
-        break;
     case Game::INTRO_COMPLETE:
-
+        game->dialogbox->getBox(Game::help,Game::help);
         break;
-    case Game::PHONES_GAME_STARTED:
-//        emit dialogCall(Game::deadmanSeq2Start,Game::deadmanSeq2Start+4);
-        break;
-    case Game::PHONES_GAME_COMPLETE:
-//        emit dialogCall(Game::deadmanSeq3Start,Game::deadmanSeq3Start);
-        break;
-    case Game::ENERGY_DRINKS_GAME_COMPLETE: case Game::BUGS_FIGHT_STARTED:
-//        emit dialogCall(Game::deadmanSeq4Start,Game::deadmanSeq4Start);
-        break;
-    case Game::BUGS_DEFEATED:
-//        emit dialogCall(Game::deadmanSeq5Start,Game::deadmanSeq5Start+9);
-        break;
-    case Game::CLOVER_QUEST_COMPLETE:
-//        emit dialogCall(Game::deadmanSeq6Start,Game::deadmanSeq6Start);
+    default:
+        game->dialogbox->getBox(Game::help+1,Game::help+1);
         break;
     }
     return true;
@@ -412,12 +391,12 @@ bool Passage::interact() {
             Buzz::next_level();
         } else {
             game->progress = Game::PHONES_GAME_COMPLETE;
+            game->save();
         }
         break;
     default:
         break;
     }
     emit game_advance();
-
     return false;
 }

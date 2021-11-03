@@ -58,9 +58,9 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             case Game::gardenerSeqStart+4:
                 game->setBackgroundBrush(QBrush(QImage(":/images/bg-start.png")));
                 game->gardener->show();
-                //                game->music->setCurrentIndex(1);
-                //                game->current_music->setVolume(50);
-                //                game->current_music->play();
+                game->music->setCurrentIndex(1);
+                game->current_music->setVolume(50);
+                game->current_music->play();
                 getBox(Game::gardenerSeqStart+5, Game::gardenerSeqStart+35);
                 break;
             case Game::gardenerSeqStart+35:
@@ -79,9 +79,6 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
             case Game::energySeqStart+13:
                 // Зыкрыть напитки
                 delete game->drinkgame;
-//                game->music->setCurrentIndex(2);
-//                game->current_music->setVolume(50);
-//                game->current_music->play();
                 game->progress = Game::ENERGY_DRINKS_GAME_COMPLETE;
                 game->passage->show();
                 game->save();
@@ -90,9 +87,6 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 
             case Game::bugFightStart+4:
                 // Начало боя с жуками
-//                game->music->setCurrentIndex(5);
-//                game->current_music->setVolume(50);
-//                game->current_music->play();
                 game->player->enable_shooting();
                 for (int i = 0; i < 5; ++i) {
                     game->bug[i]->start();
@@ -102,46 +96,36 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 
             case Game::bugFightStart+7: {
                 // Битва с боссом
-//                game->music->setCurrentIndex(5);
-//                game->current_music->setVolume(50);
-//                game->current_music->play();
                 game->boss->start();
                 break;
             }
             case Game::bugFightStart+8:
-                // Битва с боссом
-//                game->music->setCurrentIndex(5);
-//                game->current_music->setVolume(50);
-//                game->current_music->play();
+                // Победа
                 game->progress = Game::BUGS_DEFEATED;
                 game->passage->show();
+                game->save();
                 getBox(Game::bugFightStart+9, Game::bugFightStart+10);
                 break;
 
             case Game::cloverSeqStart+21:
                 // Загадка клевера
-//                game->music->setCurrentIndex(5);
-//                game->current_music->setVolume(50);
-//                game->current_music->play();
                 game->clover_game();
                 break;
 
             case Game::cloverSeqStart+22:
                 // Закрываем клевер
-//                game->music->setCurrentIndex(5);
-//                game->current_music->setVolume(50);
-//                game->current_music->play();
+                game->music->setCurrentIndex(6);
+                game->current_music->setVolume(50);
+                game->current_music->play();
                 game->progress = Game::CLOVER_QUEST_COMPLETE;
+                game->save();
                 game->passage->show();
                 delete game->clovergame;
                 getBox(Game::cloverSeqStart+23,Game::cloverSeqStart+32);
                 break;
             case Game::cloverSeqStart+32:
-                // Закрываем клевер
-//                game->music->setCurrentIndex(5);
-//                game->current_music->setVolume(50);
-//                game->current_music->play();
                 game->clover->hide();
+                getBox(Game::cloverSeqStart+33,Game::cloverSeqStart+37);
                 break;
             }
 
@@ -156,8 +140,7 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
 
 void DialogBox::getBox(int in_start, int in_end) {
     ready_to_change = false;
-//    timer->start(750);
-    timer->start(1);
+    timer->start(750);
 
     start = in_start;
     end = in_end;

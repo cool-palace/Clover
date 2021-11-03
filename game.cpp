@@ -17,41 +17,38 @@ Game::Game(QWidget* parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(scene->width(),scene->height());
 
-//    music = new QMediaPlaylist();
-//    music->addMedia(QUrl("qrc:/sounds/title_screen.mp3"));
-//    music->addMedia(QUrl("qrc:/sounds/cave_theme.mp3"));
-//    music->addMedia(QUrl("qrc:/sounds/outside_theme.mp3"));
-//    music->addMedia(QUrl("qrc:/sounds/solving_riddles.mp3"));
-//    music->addMedia(QUrl("qrc:/sounds/minigame.mp3"));
-//    music->addMedia(QUrl("qrc:/sounds/snake_fight.mp3"));
-//    music->addMedia(QUrl("qrc:/sounds/sunken_heart.mp3"));
-//    music->addMedia(QUrl("qrc:/sounds/empty_world.mp3"));
-//    music->addMedia(QUrl("qrc:/sounds/witch_fight.mp3"));
-//    music->addMedia(QUrl("qrc:/sounds/gardener_revived.mp3"));
-//    music->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+    music = new QMediaPlaylist();
+    music->addMedia(QUrl("qrc:/sounds/Been Thinking About It.mp3"));
+    music->addMedia(QUrl("qrc:/sounds/Waking up in the Morning.mp3"));
+    music->addMedia(QUrl("qrc:/sounds/A Step Forward Into Terror.mp3"));
+    music->addMedia(QUrl("qrc:/sounds/Misato.mp3"));
+    music->addMedia(QUrl("qrc:/sounds/Decisive Battle.mp3"));
+    music->addMedia(QUrl("qrc:/sounds/A Moment When Tension Breaks.mp3"));
+    music->addMedia(QUrl("qrc:/sounds/When I Find Peace of Mind.mp3"));
+    music->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
 
-//    current_music = new QMediaPlayer();
-//    current_music->setPlaylist(music);
+    current_music = new QMediaPlayer();
+    current_music->setPlaylist(music);
 }
 
 void Game::displayMainMenu(){
 
-//    music->setCurrentIndex(0);
-//    current_music->setVolume(100);
-//    current_music->play();
+    music->setCurrentIndex(0);
+    current_music->setVolume(100);
+    current_music->play();
 
-//    QFile save("save.txt");
-//    if (save.open(QIODevice::ReadOnly)) {
-//        QTextStream in(&save);
-//        QString str;
-//        in >> str;
-//        int in_progress = str.toInt();
-//        save.close();
+    QFile save("save.txt");
+    if (save.open(QIODevice::ReadOnly)) {
+        QTextStream in(&save);
+        QString str;
+        in >> str;
+        int in_progress = str.toInt();
+        save.close();
 
-//        if (in_progress >= 0 && in_progress < 20)  {
-//            progress = static_cast<Progress>(in_progress);
-//        }
-//    }
+        if (in_progress >= 0 && in_progress < 20)  {
+            progress = static_cast<Progress>(in_progress);
+        }
+    }
 
     scene->clear();
     setBackgroundBrush(QBrush(QImage(":/images/bg.jpg")));
@@ -111,6 +108,9 @@ void Game::init() {
 }
 
 void Game::start(){
+    if (progress == CLOVER_QUEST_COMPLETE) {
+        progress = START;
+    }
     init();
     setBackgroundBrush(QBrush(QImage(":/images/bg-start.png")));
 
@@ -128,11 +128,13 @@ void Game::start(){
         setBackgroundBrush(QBrush(Qt::black));
         passage->hide();
         gardener->hide();
+        current_music->stop();
         dialogbox->getBox(gardenerSeqStart,gardenerSeqStart+4);
         break;
     case ENERGY_DRINKS_GAME_COMPLETE: case BUGS_DEFEATED:
         setBackgroundBrush(QBrush(QImage(":/images/bg-start.png")));
         passage->setPixmap(QPixmap(":/images/passage-1.png"));
+        break;
     default:
         setBackgroundBrush(QBrush(QImage(":/images/bg-start.png")));
         break;
@@ -167,11 +169,11 @@ void Game::phones_game() {
     QString str = ":/images/bg-buzz-%1.png";
     setBackgroundBrush(QBrush(QImage(str.arg(Buzz::current_level()))));
 
-//    music->setCurrentIndex(4);
-//    current_music->setVolume(10);
-//    current_music->play();
-
-    if (Buzz::current_level() == 3) {
+    if (Buzz::current_level() == 1) {
+        music->setCurrentIndex(2);
+        current_music->setVolume(50);
+        current_music->play();
+    } else if (Buzz::current_level() == 3) {
         int pxPos = scene->width()/2 - player->boundingRect().width()*player->scale()/2;
         int pyPos = 0;
         player->setPos(pxPos,pyPos);
@@ -193,6 +195,10 @@ void Game::phones_game() {
 void Game::mice_meeting() {
     setBackgroundBrush(QBrush(QImage(":/images/bg-buzz-1.png")));
 
+    music->setCurrentIndex(3);
+    current_music->setVolume(50);
+    current_music->play();
+
     Mice * mice = new Mice();
     scene->addItem(mice);
 
@@ -201,10 +207,6 @@ void Game::mice_meeting() {
 }
 
 void Game::drink_game() {
-
-//    music->setCurrentIndex(4);
-//    current_music->setVolume(10);
-//    current_music->play();
 
     drinkgame = new DrinkGame();
     connect(drinkgame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
@@ -216,9 +218,9 @@ void Game::drink_game() {
 void Game::bug_fight() {
     setBackgroundBrush(QBrush(QImage(":/images/bg-fight.png")));
 
-//    music->setCurrentIndex(4);
-//    current_music->setVolume(10);
-//    current_music->play();
+    music->setCurrentIndex(4);
+    current_music->setVolume(50);
+    current_music->play();
 
     for (int i = 0; i < 5; ++i) {
         bug[i] = new Bug();
@@ -235,9 +237,9 @@ void Game::bug_fight() {
 void Game::clover_search() {
     setBackgroundBrush(QBrush(QImage(":/images/bg-field-fence.png")));
 
-//    music->setCurrentIndex(4);
-//    current_music->setVolume(10);
-//    current_music->play();
+    music->setCurrentIndex(5);
+    current_music->setVolume(50);
+    current_music->play();
 
     Flower * flower[14];
     for (int i = 0; i < 14; ++i) {
@@ -275,39 +277,39 @@ void Game::save() {
 }
 
 const QVector<Speechline> Game::speech = {
-    {":/images/player.png", "Так темно..."}, // 0
-    {":/images/player.png", "Почему так темно?"},
-    {":/images/player.png", "Что со мной?"},
-    {":/images/gardener.png", "Кто это здесь?"},
-    {":/images/gardener.png", "Девочка, проснись!"},
+    {":/images/player-sad.png", "Я ненавижу этот день..."}, // 0
+    {":/images/player-sad.png", "Почему всё так складывается? Что со мной?"},
+    {":/images/player-sad.png", "Почему так темно?"},
+    {":/images/gardener1.png", "Кто это здесь?"},
+    {":/images/gardener1.png", "Проснись!"},
     {":/images/player.png", "А? Где это я? И кто ты?"}, // +5
-    {":/images/gardener.png", "Я пришёл поработать немного у себя в саду, но нашёл здесь тебя спящей. Как ты здесь оказалась?"},
+    {":/images/gardener.png", "Я пришёл поработать немного у себя в саду, но нашёл здесь тебя спящей. Ты в порядке? Как ты здесь оказалась?"},
     {":/images/player.png", "Я не знаю..."},
-    {":/images/player.png", "В последнее время у меня всё идёт не по плану,<br>и вот теперь это..."},
-    {":/images/gardener.png", "Всё не по плану, говоришь?.."},
-    {":/images/player.png", "Как будто не везёт постоянно."},
-    {":/images/gardener.png", "Значит, тебе просто нужно немного удачи?"},
-    {":/images/player.png", "Не помешало бы. Но вообще, как мне попасть домой?"},
+    {":/images/player-sad.png", "В последнее время у меня всё идёт наперекосяк,<br>и вот теперь это..."},
+    {":/images/gardener.png", "Всё наперекосяк, говоришь?.."},
+    {":/images/player-sad.png", "Как будто не везёт постоянно. Я так устала от всего этого..."},
+    {":/images/gardener.png", "Может быть, тебе просто нужно немного удачи?"},
+    {":/images/player-annoyed.png", "Не помешало бы. Но вообще, как мне попасть домой?"},
     {":/images/gardener.png", "Можно сказать, в этот раз тебе всё-таки повезло.<br>Жёлтая дорожка ведёт к выходу, он довольно недалеко, а по пути ты можешь найти кое-что, что должно тебе помочь."},
     {":/images/player.png", "Что-то, что должно мне помочь? В каком смысле?"},
     {":/images/gardener.png", "Там будет небольшая клумба, где растут клеверы.<br>Если тебе повезёт, то ты сможешь найти четырёхлистник,<br>а они приносят удачу."},
     {":/images/player.png", "Они же очень редкие, возможно, что такого там даже не будет. Почему ты думаешь, что я его найду?"},
-    {":/images/gardener.png", "Ну, в конце концов, это волшебный сад.<br>Я думаю, если ты здесь появилась, то обязательно найдёшь свой четырёхлистный клевер."},
-    {":/images/player.png", "<i>Да уж, чтобы клеверы на клумбе росли...<br>Точно волшебный сад...</i>"},
-    {":/images/gardener.png", "Ну, это пока просто хобби, и я не так много времени ему уделяю, как хотел бы..."},
-    {":/images/gardener.png", "Постой. Есть одна сложность, я забыл тебе сказать."},
+    {":/images/gardener.png", "Ну, в конце концов, это волшебный сад. Я думаю, если ты здесь появилась, то обязательно найдёшь свой четырёхлистный клевер."},
+    {":/images/player-annoyed.png", "<i>Да уж, чтобы клеверы на клумбе росли...<br>Точно волшебный сад...</i>"},
+    {":/images/gardener-think.png", "Ну, это пока просто хобби, и я не так много времени ему уделяю, как хотел бы..."},
+    {":/images/gardener-shocked.png", "Постой. Есть одна сложность, я забыл тебе сказать."},
     {":/images/player.png", "Какая?"},
     {":/images/gardener.png", "Как ты относишься к насекомым?"},
-    {":/images/player.png", "Ужасно! Я панически их боюсь!"},
-    {":/images/gardener.png", "Беда... Я давно здесь не был, и их тут развелось довольно много... Придётся идти мимо них."},
-    {":/images/player.png", "А другого пути нет?"},
-    {":/images/gardener.png", "Это самый короткий. Не бойся, что-нибудь придумаем.<br>Они не должны тебя трогать, но жужжат громко и могут сбить с толку. С учётом того, что ты их не переносишь, пройти будет сложно..."},
+    {":/images/player-fear.png", "Ужасно! Я панически их боюсь!"},
+    {":/images/gardener-sad.png", "Беда... Я давно здесь не был, и их тут развелось довольно много... Придётся идти мимо них."},
+    {":/images/player-sad.png", "А другого пути нет?"},
+    {":/images/gardener-think.png", "Это самый короткий. Не бойся, что-нибудь придумаем.<br>Они не должны тебя трогать, но жужжат громко и могут сбить с толку. С учётом того, что ты их не переносишь, пройти будет сложно..."},
     {":/images/gardener.png", "Я придумал! Вот, возьми наушники, чтобы их жужжание тебе не мешало. Заодно я смогу связываться с тобой по пути, очень удобно."},
     {":/images/player.png", "Хорошо. Постой..."},
-    {":/images/player.png", "Это же строительные..."},
-    {":/images/gardener.png", "Да, защищают от шума лучше всего."},
+    {":/images/player-annoyed.png", "Это же строительные..."},
+    {":/images/gardener-smug.png", "Да, защищают от шума лучше всего."},
     {":/images/player.png", "Как ты через них связываться собрался?"},
-    {":/images/gardener.png", "..."},
+    {":/images/gardener-think.png", "..."},
     {":/images/gardener.png", "Ну, в любом случае стоит попробовать."},
     {":/images/gardener.png", "Запомни: когда видишь, что звуковая волна приближается<br>к тебе, нажми ПРОБЕЛ и наушники тебя защитят. Если не успеешь, то не сможешь пройти дальше."},
     {":/images/gardener.png", "Если готова, то попробуй пройти дальше по дороге,<br>посмотри, что там."}, //+35
@@ -322,17 +324,17 @@ const QVector<Speechline> Game::speech = {
     {":/images/player.png", "Стой, что это за странная компания тут?"},
     {":/images/player.png", "Наверно, надо уточнить у них дорогу."}, // +3
 
-    {":/images/mouse-1.png", "Я тебе говорю, этот лучше!"}, // mice
-    {":/images/mouse-2.png", "Ты чего, он же вообще отстой!"},
+    {":/images/mouse-3.png", "Я тебе говорю, этот лучше!"}, // mice
+    {":/images/mouse-4.png", "Ты чего, он же вообще отстой!"},
     {":/images/player.png", "Привет, вы не знаете, тут можно по дороге пройти?<br>Впереди нет жуков?"},
     {":/images/mouse-1.png", "А? Там самое их гнездо. Просто так не пройдёшь."},
     {":/images/mouse-2.png", "Если тебе нужно вперёд, придётся их победить."},
     {":/images/player.png", "Победить? У меня совсем нет сил, чтобы драться...<br>Тем более, с этими жуками..."},
     {":/images/mouse-1.png", "Если нет сил, значит, просто нужно зарядиться!"},
-    {":/images/mouse-1.png", "У нас как раз 5 банок, так что одной можем поделиться."},
+    {":/images/mouse-3.png", "У нас как раз 5 банок, так что одной можем поделиться."},
     {":/images/player.png", "Вы о чём?"},
-    {":/images/mouse-1.png", "Мы долго спорим, какой из этих энергосов вкуснее,<br>и никак не можем прийти к общему решению."},
-    {":/images/mouse-1.png", "Попробуй их и рассуди нас, а мы отдадим тебе лучший."},
+    {":/images/mouse-2.png", "Мы долго спорим, какой из этих энергосов вкуснее,<br>и никак не можем прийти к общему решению."},
+    {":/images/mouse-4.png", "Попробуй их и рассуди нас, а мы отдадим тебе лучший."},
     {":/images/mouse-1.png", "Тогда и жуков легко одолеешь."},
     {":/images/player.png", "Пробовать энергосы? Это я умею, давайте!"}, // +12
 
@@ -346,29 +348,29 @@ const QVector<Speechline> Game::speech = {
     {":/images/player.png", "На вкус как тот, только меньше сахара. Огонь!"},
     {":/images/player-smile.png", "Что-то похожее по вкусу на предыдущий, НО ЛУЧШЕ.<br>И очень газированно!"},
     {":/images/player-smile.png", "Ребята, ребята, это не учебная тревога!<br>Найден невероятно вкусный энергетик!"},
-    {":/images/mouse-1.png", "Похоже, ты ещё не расположила все энергосы по местам."}, //
-    {":/images/mouse-1.png", "На каждом месте должно быть не больше одной банки."},
-    {":/images/mouse-1.png", "Распробуй энергосы получше, пока кажется, что что-то не совсем правильно."}, //
+    {":/images/mouse-2.png", "Похоже, ты ещё не расположила все энергосы по местам."}, //
+    {":/images/mouse-4.png", "На каждом месте должно быть не больше одной банки."},
+    {":/images/mouse-3.png", "Распробуй энергосы получше, пока кажется, что что-то не совсем правильно."}, //
     {":/images/mouse-1.png", "Всё правильно!"}, //
     {":/images/mouse-1.png", "Спасибо за помощь! Возьми баночку в награду и выпей, чтобы набраться сил."},
     {":/images/player.png", "С учётом того, сколько пришлось перепробовать, силы уже начинают ощущаться. Хотя, сейчас не помешает ещё."}, //+15
 
     {":/images/bug.png", "Сдавайся! Ты не пройдёшь дальше!"}, // bugs
-    {":/images/gardener.png", "Похоже, одними наушниками уже не обойдёшься.<br>В этот раз попробуй стрелять в жуков с помощью пробела."},
+    {":/images/gardener-think.png", "Похоже, одними наушниками уже не обойдёшься.<br>В этот раз попробуй стрелять в жуков с помощью пробела."},
     {":/images/gardener.png", "Энергии теперь тебе должно хватить."},
-    {":/images/player.png", "Я и правда чувствую прилив сил, но стрелять? Чем?"},
+    {":/images/player-annoyed.png", "Я и правда чувствую прилив сил, но стрелять? Чем?"},
     {":/images/player.png", "Видимо, придётся просто попробовать. Пробел, да?"},
 
-    {":/images/bug-boss.png", "Ты победила моих слуг, но я не позволю тебе пройти дальше."}, //+5
+    {":/images/boss.png", "Ты победила моих слуг, но я не позволю тебе пройти дальше."}, //+5
     {":/images/player.png", "Заюш, ты лучше уйди, а то и тебя застрелю."},
-    {":/images/bug-boss.png", "Убирайся! Это моя территория!"}, // +7
-    {":/images/bug-boss.png", "Похоже, надо искать другое место..."},
-    {":/images/player.png", "Фух... Я в самом деле победила!"},
+    {":/images/boss.png", "Убирайся! Это моя территория!"}, // +7
+    {":/images/boss.png", "Похоже, надо искать другое место..."},
+    {":/images/player-smile.png", "Фух... Я в самом деле победила!"},
     {":/images/gardener.png", "Отличная работа! Теперь вперёд, клумба прямо перед тобой."},
 
-    {":/images/player.png", "Вот это клумба... Целый один цветочек."},
-    {":/images/player.png", "Совсем ты за своим садом не ухаживал. Не то что четырёхлистника, даже обычных клеверов не видно."},
-    {":/images/player.png", "И как тут можно искать что-то?"},
+    {":/images/player-annoyed.png", "Вот это клумба... Целый один цветочек."},
+    {":/images/player-annoyed.png", "Совсем ты за своим садом не ухаживал. Не то что четырёхлистника, даже обычных клеверов не видно."},
+    {":/images/player-annoyed.png", "И как тут можно искать что-то?"},
     {":/images/gardener.png", "Не торопи события. Почему бы тебе для начала не посмотреть поближе на этот цветок?"},
     {":/images/player.png", "Что ж, ну ладно. Больше тут и не на что смотреть."},
 
@@ -377,14 +379,14 @@ const QVector<Speechline> Game::speech = {
     {":/images/player.png", "Да, попробую проверить его тоже."},
 
     {":/images/player.png", "Сплошные нули. Так и должно быть?"},
-    {":/images/player.png", "И этот тоже..."},
+    {":/images/player-annoyed.png", "И этот тоже..."},
     {":/images/player.png", "Наконец-то что-то больше нуля! Интересно, что это за цифры?"},
     {":/images/player.png", "Какая-то извилистая дорога получается.<br>Любопытно, куда эти цветы меня ведут?"},
     {":/images/player.png", "Это что? Неужели?.."},
     {":/images/player.png", "Четырёхлистный клевер..."},
-    {":/images/player.png", "Понятно, эти цветы показывали мне дорогу к нему.<br>Только что всё-таки означают цифры?"},
+    {":/images/player-smile.png", "Вот оно что...<br>Только что всё-таки означают цифры?"},
     {":/images/gardener.png", "Попробуй записать их в том порядке, в котором ты их проходила.<br>Кто знает, вдруг это пригодится."},
-    {":/images/player.png", "Ладно... Глядя на свой путь, наверно, уже не запутаюсь.<br>Может быть, сделать скриншот на всякий случай тоже будет полезно."},
+    {":/images/player-smile.png", "Ладно... Глядя на свой путь, наверно, уже не запутаюсь.<br>Может быть, сделать скриншот на всякий случай тоже будет полезно."},
     {":/images/gardener.png", "Ты уже рассмотрела клевер? Приглядись к нему тоже."},
     {":/images/player.png", "Сейчас, посмотрю..."},
 
@@ -398,9 +400,17 @@ const QVector<Speechline> Game::speech = {
     {":/images/gardener.png", "Я уверен, что если ты всё записала верно, то они пригодятся тебе впереди."},
     {":/images/gardener.png", "К примеру, ты когда-нибудь проходила какие-либо странные спонтанные квесты?"},
     {":/images/player.png", "Странные квесты?.. Было дело, но это довольно давно..."},
-    {":/images/gardener.png", "Я практически уверен, что можно попробовать проверить эти цифры в том месте,<br>где ты была в прошлый раз."},
-    {":/images/player.png", "Хорошо... Я постараюсь проверить."},
-    {":/images/gardener.png", "Пока ты не ушла, не забудь взять и сам клевер с собой. Будем считать, что это мой маленький подарок для тебя. И, кстати, с днём рождения)"},
-    {":/images/gardener.png", "Возможно, ещё увидимся)"},
-    {":/images/player.png", "Спасибо... Надеюсь, что так."},
+    {":/images/gardener.png", "Я практически уверен, что можно попробовать проверить эти цифры в том месте, где ты была в прошлый раз."},
+    {":/images/player-smile.png", "Хорошо... Я постараюсь проверить."},
+    {":/images/gardener.png", "Пока ты не ушла, не забудь взять и сам клевер с собой. И, кстати, с днём рождения) Будем считать, что это мой маленький подарок."},
+    {":/images/gardener.png", "Знаю, что глупо советовать не грустить, но надеюсь, что он хоть немного поможет тебе в этом."},
+    {":/images/player-smile.png", "Спасибо... Это очень..."},
+    {":/images/gardener.png", "Что говоришь? Связь слабеет, и я уже не совсем хорошо тебя слышу. Можешь повторить?"},
+    {":/images/player-smile.png", "Я говорю, надеюсь, мы ещё увидимся."},
+    {":/images/gardener.png", "Обязательно!"},
+    {":/images/player-smile.png", "Тогда я пойду, у меня ведь есть свои дела сегодня.<br>До встречи, садовник."},
+    {":/images/gardener.png", "Удачи тебе!"},
+
+    {":/images/gardener.png", "Кстати, я умею сохранять игру, так что можешь не беспокоиться, что много потеряешь, если нужно будет прерваться."},
+    {":/images/gardener.png", "Я загрузил сохранённую игру, так что можешь смело идти вперёд."},
 };

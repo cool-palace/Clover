@@ -46,6 +46,9 @@ void Player::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_Space) {
         if (!canShoot) {
             phones_on = true;
+            if (direction == RIGHT) {
+                setPixmap(QPixmap(":/images/player-phones-right.png"));
+            } else setPixmap(QPixmap(":/images/player-phones-left.png"));
         } else if (Bullet::bullet_count < 10) {
             direction = RIGHT;
 
@@ -102,7 +105,7 @@ void Player::keyPressEvent(QKeyEvent *event){
         }
     }
     else if (event->key() == Qt::Key_Up || event->key() == Qt::Key_W){
-        direction = UP;
+//        direction = UP;
         if (y() > 0) {
             if (y()-step > 0) {
                 diff.setY(-step);
@@ -110,7 +113,7 @@ void Player::keyPressEvent(QKeyEvent *event){
         }
     }
     else if (event->key() == Qt::Key_Down || event->key() == Qt::Key_S){
-        direction = DOWN;
+//        direction = DOWN;
         if (y() < game->scene->height() - boundingRect().height()*scale()) {
             if (y() + step < game->scene->height() - boundingRect().height()*scale() ) {
                 diff.setY(step);
@@ -162,6 +165,9 @@ void Player::keyPressEvent(QKeyEvent *event){
 void Player::keyReleaseEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Space && phones_on) {
         phones_on = false;
+        if (direction == RIGHT) {
+            setPixmap(QPixmap(":/images/player-right.png"));
+        } else setPixmap(QPixmap(":/images/player-left.png"));
         setMovable();
     }
 }

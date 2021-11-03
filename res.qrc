@@ -1,5 +1,15 @@
 <RCC>
-    <qresource prefix="/sounds"/>
+    <qresource prefix="/sounds">
+        <file>wrong.wav</file>
+        <file>A Moment When Tension Breaks.mp3</file>
+        <file>A Step Forward Into Terror.mp3</file>
+        <file>Been Thinking About It.mp3</file>
+        <file>correct.wav</file>
+        <file>Decisive Battle.mp3</file>
+        <file>Misato.mp3</file>
+        <file>Waking up in the Morning.mp3</file>
+        <file>When I Find Peace of Mind.mp3</file>
+    </qresource>
     <qresource prefix="/images">
         <file>bg.jpg</file>
         <file>player-left.png</file>
@@ -34,5 +44,24 @@
         <file>flower-c.png</file>
         <file>clover.png</file>
         <file>bg-field-fence.png</file>
+        <file>bug-buzz.png</file>
+        <file>boss.png</file>
+        <file>gardener_smug.png</file>
+        <file>gardener-sad.png</file>
+        <file>gardener-shocked.png</file>
+        <file>gardener-smug.png</file>
+        <file>gardener-sprite.png</file>
+        <file>gardener-think.png</file>
+        <file>mouse-1.png</file>
+        <file>mouse-2.png</file>
+        <file>mouse-3.png</file>
+        <file>mouse-4.png</file>
+        <file>player.png</file>
+        <file>player-annoyed.png</file>
+        <file>player-fear.png</file>
+        <file>player-phones-left.png</file>
+        <file>player-phones-right.png</file>
+        <file>player-sad.png</file>
+        <file>player-smile.png</file>
     </qresource>
 </RCC>
