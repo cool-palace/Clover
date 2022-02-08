@@ -3,8 +3,7 @@
 #include <QDebug>
 extern Game * game;
 
-Digit::Digit(int digit, QGraphicsItem* parent) : QGraphicsTextItem(parent)
-{
+Digit::Digit(int digit, QGraphicsItem* parent) : QGraphicsTextItem(parent) {
     if (digit < 0 || digit > 9) return;
     value_ = digit;
 
@@ -36,11 +35,9 @@ int Digit::value() {
     return value_;
 }
 
-CloverGame::CloverGame(QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(parent)
-{
+CloverGame::CloverGame(QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(parent) {
     setPixmap(QPixmap(":/images/bg.jpg"));
     setZValue(3);
-//    setPos(50, 10);
 
     clover = new QGraphicsPixmapItem(this);
     clover->setPixmap(QPixmap(":/images/clover.png"));

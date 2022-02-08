@@ -16,7 +16,7 @@ class Digit : public QGraphicsTextItem
     Q_OBJECT
 public:
     Digit(int digit, QGraphicsItem* parent = nullptr);
-    virtual ~Digit() = default;
+    ~Digit() override = default;
     int value();
 
 public slots:
@@ -32,7 +32,7 @@ class CloverGame : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     CloverGame(QGraphicsItem * parent = nullptr);
-    virtual ~CloverGame();
+    ~CloverGame() override;
 
 public slots:
     void checkAnswer();

@@ -15,14 +15,14 @@ class Drink : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     Drink(int id, QGraphicsItem * parent = nullptr);
-    virtual ~Drink() = default;
+    ~Drink() override = default;
     static int last_taste;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
 public slots:
     int taste();
@@ -40,7 +40,7 @@ class DrinkGame : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     DrinkGame(QGraphicsItem* parent = nullptr);
-    virtual ~DrinkGame();
+    ~DrinkGame() override;
 
 public slots:
     void checkAnswer();

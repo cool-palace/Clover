@@ -10,7 +10,7 @@ class Bullet : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     Bullet(int dir, qreal size = 1, QGraphicsItem *parent = nullptr);
-    virtual ~Bullet();
+    ~Bullet() override;
     enum directions {
         UP,
         DOWN,
@@ -36,7 +36,7 @@ class BugBossBuzz : public QGraphicsTextItem
     Q_OBJECT
 public:
     BugBossBuzz(QGraphicsItem *parent = nullptr);
-    virtual ~BugBossBuzz();
+    ~BugBossBuzz() override;
 
 public slots:
     void move();

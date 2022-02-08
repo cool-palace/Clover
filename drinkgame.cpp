@@ -3,8 +3,7 @@
 
 extern Game * game;
 
-Drink::Drink(int id, QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(parent)
-{
+Drink::Drink(int id, QGraphicsItem * parent) : QObject(), QGraphicsPixmapItem(parent) {
     QString str = ":/images/drink-small-%1.png";
     setPixmap(QPixmap(str.arg(id+1)));
     switch (id) {
@@ -35,22 +34,23 @@ int Drink::taste() {
 }
 
 void Drink::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    this->setPos(mapToScene(event->pos() + m_shiftMouseCoords));
+    Q_UNUSED(event);
+    setPos(mapToScene(event->pos() + m_shiftMouseCoords));
 }
 
 void Drink::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    Q_UNUSED(event);
     m_shiftMouseCoords = pos() - mapToScene(event->pos());
     setCursor(QCursor(Qt::ClosedHandCursor));
-    Q_UNUSED(event);
 }
 
-void Drink::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    this->setCursor(QCursor(Qt::ArrowCursor));
+void Drink::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     Q_UNUSED(event);
+    setCursor(QCursor(Qt::ArrowCursor));
 }
 
 void Drink::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+    Q_UNUSED(event);
     if (last_taste == 0) {
         emit degustation(Game::energySeqStart,Game::energySeqStart);
     } else {
@@ -60,16 +60,17 @@ void Drink::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
     last_taste = drink_taste;
 }
 
-void Drink::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
+void Drink::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+    Q_UNUSED(event);
     setCursor(QCursor(Qt::OpenHandCursor));
 }
 
-void Drink::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
+void Drink::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+    Q_UNUSED(event);
     setCursor(QCursor(Qt::ArrowCursor));
 }
 
-DrinkGame::DrinkGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent)
-{
+DrinkGame::DrinkGame(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent) {
     setPixmap(QPixmap(":/images/bg.jpg"));
     setZValue(3);
 
@@ -143,7 +144,6 @@ DrinkGame::~DrinkGame() {
 }
 
 void DrinkGame::checkAnswer() {
-
     bool all_placed = true;
 
     for (int i = 0; i < 5; ++i) {

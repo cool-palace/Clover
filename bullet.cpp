@@ -5,18 +5,14 @@
 
 extern Game * game;
 
-Bullet::Bullet(int dir, qreal size, QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent)
-{
+Bullet::Bullet(int dir, qreal size, QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent) {
     setPixmap(QPixmap(":/images/bullet.png"));
     setScale(size);
 
     direction = static_cast<directions>(dir);
 
-    // make/connect a timer to move() the bullet every so often
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(move()));
-
-    // start the timer
     timer->start(50);
     ++bullet_count;
     show();
@@ -27,7 +23,7 @@ Bullet::~Bullet() {
     --bullet_count;
 };
 
-void Bullet::move(){
+void Bullet::move() {
     int step = 15;
 
     switch (direction) {
@@ -47,14 +43,9 @@ void Bullet::move(){
 
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
-        if (dynamic_cast<Bug*>(colliding_items[i])){
-            Bug * bug = dynamic_cast<Bug*>(colliding_items[i]);
+        Enemy * bug = dynamic_cast<Enemy*>(colliding_items[i]);
+        if (bug) {
             bug->shot();
-            delete this;
-            return;
-        } else if (dynamic_cast<BugBoss*>(colliding_items[i])) {
-            BugBoss * bug_boss = dynamic_cast<BugBoss*>(colliding_items[i]);
-            bug_boss->shot();
             delete this;
             return;
         } else if (dynamic_cast<BugBossBuzz*>(colliding_items[i])) {
@@ -72,17 +63,13 @@ void Bullet::move(){
 
 int Bullet::bullet_count = 0;
 
-BugBossBuzz::BugBossBuzz(QGraphicsItem *parent): QGraphicsTextItem(parent)
-{
+BugBossBuzz::BugBossBuzz(QGraphicsItem *parent): QGraphicsTextItem(parent) {
     setDefaultTextColor(Qt::black);
-    setFont({"Comic Sans", 16});
+    setFont({"Verdana", 16});
     setHtml(buzzs[rand()%3]);
 
-    // make/connect a timer to move() the bullet every so often
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(move()));
-
-    // start the timer
     timer->start(50);
     show();
 }
@@ -91,15 +78,14 @@ BugBossBuzz::~BugBossBuzz() {
     delete timer;
 };
 
-void BugBossBuzz::move(){
+void BugBossBuzz::move() {
     int step = -15;
-
     setPos(x()+step,y());
 
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
-        if (dynamic_cast<Player*>(colliding_items[i])){
-            Player* player = dynamic_cast<Player*>(colliding_items[i]);
+        Player* player = dynamic_cast<Player*>(colliding_items[i]);
+        if (player) {
             player->shot();
             delete this;
             return;

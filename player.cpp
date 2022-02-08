@@ -3,13 +3,11 @@
 #include <QGraphicsScene>
 #include <QKeyEvent>
 #include <QDebug>
-//#include "bullet.h"
 
-extern Game * game; // there is an external global object called game
+extern Game * game;
 int step = 24;
 
-Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent){
-    // set graphic
+Player::Player(QGraphicsItem *parent): QGraphicsPixmapItem(parent) {
     setPixmap(QPixmap(":/images/player-right.png"));
     bulletSound = new QMediaPlayer();
     bulletSound->setMedia(QUrl("qrc:/sounds/bullet.wav"));
@@ -41,7 +39,7 @@ bool Player::phones_are_on() {
     return phones_on;
 }
 
-void Player::keyPressEvent(QKeyEvent *event){
+void Player::keyPressEvent(QKeyEvent *event) {
 
     if (event->key() == Qt::Key_Space) {
         if (!canShoot) {
@@ -77,24 +75,20 @@ void Player::keyPressEvent(QKeyEvent *event){
             game->scene->addItem(bullet);
             return;
         }
-
     }
 
     // calculating new position
-
     QPointF diff = {0, 0};
     if (event->key() == Qt::Key_Left || event->key() == Qt::Key_A) {
         if (direction != LEFT) {
             set_direction(LEFT);
         }
-
         if (x() > 0) {
             if (x()-step > 0) {
                 diff.setX(-step);
             } else diff.setX(-x());
         }
-    }
-    else if (event->key() == Qt::Key_Right || event->key() == Qt::Key_D){
+    } else if (event->key() == Qt::Key_Right || event->key() == Qt::Key_D) {
         if (direction != RIGHT) {
             set_direction(RIGHT);
         }
@@ -103,17 +97,13 @@ void Player::keyPressEvent(QKeyEvent *event){
                 diff.setX(step);
             } else diff.setX(game->scene->width() - boundingRect().width()*scale() - x());
         }
-    }
-    else if (event->key() == Qt::Key_Up || event->key() == Qt::Key_W){
-//        direction = UP;
+    } else if (event->key() == Qt::Key_Up || event->key() == Qt::Key_W) {
         if (y() > 0) {
             if (y()-step > 0) {
                 diff.setY(-step);
             } else diff.setY(-y());
         }
-    }
-    else if (event->key() == Qt::Key_Down || event->key() == Qt::Key_S){
-//        direction = DOWN;
+    } else if (event->key() == Qt::Key_Down || event->key() == Qt::Key_S) {
         if (y() < game->scene->height() - boundingRect().height()*scale()) {
             if (y() + step < game->scene->height() - boundingRect().height()*scale() ) {
                 diff.setY(step);
@@ -143,23 +133,17 @@ void Player::keyPressEvent(QKeyEvent *event){
         }
     }
 
-    for (int i = 0, n = colliding_items.size(); i < n; ++i){
-        if (dynamic_cast<GameObject*>(colliding_items.at(i))) {
-            GameObject * npc = dynamic_cast<GameObject*>(colliding_items.at(i));
-            // interact() returns false on passages
-            if (!npc->interact()) return;
+    for (int i = 0, n = colliding_items.size(); i < n; ++i) {
+        GameObject * npc = dynamic_cast<GameObject*>(colliding_items.at(i));
+        if (npc && !npc->interact()) {
+            // interact() returns false on passages and true on NPCs
+            return;
         }
     }
 
     if (isMovable && !phones_on) {
         setPos(newPos);
-//        if (game->scene->width() > 800) {
-//            game->currentViewPos += diff;
-//            QRectF newView = {game->currentViewPos.x(),game->currentViewPos.y(),800,600};
-//            game->setSceneRect(newView);
-//        }
     }
-
 }
 
 void Player::keyReleaseEvent(QKeyEvent *event) {
@@ -185,6 +169,4 @@ void Player::set_direction(directions dir) {
     } else if (dir == RIGHT) {
         setPixmap(QPixmap(":/images/player-right.png"));
     }
-
 }
-

@@ -5,17 +5,15 @@ extern Game * game;
 
 GameObject::GameObject(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent) {}
 
-Bug::Bug(QGraphicsItem *parent): GameObject(parent)
-{
+Bug::Bug(QGraphicsItem *parent): Enemy(parent) {
     setPixmap(QPixmap(":/images/bug-sprite.png"));
 
-    // make/connect a timer to move() the bullet every so often
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(move()));
     ++bugCount;
 }
 
-Bug::~Bug(){
+Bug::~Bug() {
     delete timer;
 }
 
@@ -23,33 +21,25 @@ int Bug::bugCount = 0;
 
 bool Bug::interact() {
     game->player->setImmobile();
-    if (!dead) {
-//        emit game->player->dialogCall(Game::snakeSeqStart,Game::snakeSeqStart+14);
-    } else if (dead) {
-//        emit game->player->dialogCall(Game::snakeSeqStart+16+snake->id,Game::snakeSeqStart+16+snake->id);
-    }
     return true;
 }
 
 void Bug::start() {
-    // start the timer
     timer->start(100);
-//    moving = true;
 }
 
 void Bug::move() {
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
-        if (dynamic_cast<Player*>(colliding_items[i])){
-//            emit game->player->dialogCall(Game::BugSeqStart+15,Game::BugSeqStart+15);
+        if (dynamic_cast<Player*>(colliding_items[i])) {
             setPos(x()+rand()%100, y()+rand()%100);
             return;
         }
     }
 
-    int theta = rand() % 360;
-    double x_diff = 20 * qSin(qDegreesToRadians((double) theta));
-    double y_diff = 20 * qCos(qDegreesToRadians((double) theta));
+    qreal theta = static_cast<qreal>(rand() % 360);
+    qreal x_diff = 20 * qSin(qDegreesToRadians(theta));
+    qreal y_diff = 20 * qCos(qDegreesToRadians(theta));
 
     QPointF diff = {x_diff, y_diff};
 
@@ -90,11 +80,9 @@ void Bug::shot() {
     }
 }
 
-BugBoss::BugBoss(QGraphicsItem *parent): GameObject(parent)
-{
+BugBoss::BugBoss(QGraphicsItem *parent): Enemy(parent) {
     setPixmap(QPixmap(":/images/boss-sprite.png"));
 
-    // make/connect a timer to move() the bullet every so often
     move_timer = new QTimer(this);
     connect(move_timer,SIGNAL(timeout()),this,SLOT(move()));
     shoot_timer = new QTimer(this);
@@ -103,7 +91,7 @@ BugBoss::BugBoss(QGraphicsItem *parent): GameObject(parent)
     hurt_timer->setSingleShot(true);
 }
 
-BugBoss::~BugBoss(){
+BugBoss::~BugBoss() {
     delete move_timer;
     delete shoot_timer;
     delete hurt_timer;
@@ -115,7 +103,6 @@ bool BugBoss::interact() {
 }
 
 void BugBoss::start() {
-    // start the timer
     move_timer->start(100);
     shoot_timer->start(1000);
 }
@@ -204,15 +191,15 @@ void Buzz::next_level() {
 };
 
 void Buzz::change() {
-    int diameter = wave->rect().width() < game->scene->height() ? wave->rect().width() + 10 : 20;
+    int diameter = wave->rect().width() < game->scene->height() ? static_cast<int>(wave->rect().width() + 10) : 20;
     wave->setRect(boundingRect().width()/2 - diameter/2, boundingRect().height()/2 - diameter/2, diameter, diameter);
     if (wave->collidesWithItem(game->player)) {
         if (game->player->phones_are_on()) {
             int radius = 10;
             wave->setRect(boundingRect().width()/2, boundingRect().height()/2, 2*radius, 2*radius);
         } else {
-            int pxPos = Buzz::current_level() < 3 ? 0 : game->scene->width()/2 - game->player->boundingRect().width()*game->player->scale()/2;
-            int pyPos = Buzz::current_level() < 3 ? game->height()/2 - game->player->boundingRect().height()*game->player->scale()/2 : 0;
+            int pxPos = Buzz::current_level() < 3 ? 0 : static_cast<int>(game->scene->width()/2 - game->player->boundingRect().width()*game->player->scale()/2);
+            int pyPos = Buzz::current_level() < 3 ? static_cast<int>(game->height()/2 - game->player->boundingRect().height()*game->player->scale()/2) : 0;
             game->player->setPos(pxPos, pyPos);
         }
     }

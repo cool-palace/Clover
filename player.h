@@ -10,9 +10,9 @@ class Player : public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
     Player(QGraphicsItem * parent = nullptr);
-    virtual ~Player();
-    void keyPressEvent(QKeyEvent * event);
-    void keyReleaseEvent(QKeyEvent * event);
+    ~Player() override;
+    void keyPressEvent(QKeyEvent * event) override;
+    void keyReleaseEvent(QKeyEvent * event) override;
     void setMovable();
     void setImmobile();
     bool phones_are_on();

@@ -10,9 +10,7 @@ extern Game * game; // there is an external global object called game
 int DialogBox::start = 0;
 int DialogBox::end = 0;
 
-DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (parent)
-{
-    // set the brush
+DialogBox::DialogBox(QGraphicsItem * parent) : QObject(), QGraphicsRectItem (parent) {
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(Qt::darkBlue);
@@ -47,10 +45,8 @@ void DialogBox::dialog_recharge() {
     ready_to_change = true;
 }
 
-void DialogBox::keyPressEvent(QKeyEvent *event){
-
+void DialogBox::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Space && ready_to_change) {
-
         if (start == end) {
             hide();
             game->player->setFocus();
@@ -128,13 +124,10 @@ void DialogBox::keyPressEvent(QKeyEvent *event){
                 getBox(Game::cloverSeqStart+33,Game::cloverSeqStart+37);
                 break;
             }
-
-
         } else {
             ++start;
             getBox(start, end);
         }
-
     }
 }
 
@@ -146,12 +139,6 @@ void DialogBox::getBox(int in_start, int in_end) {
     end = in_end;
 
     int xPos = 0, yPos = 450;
-
-    if (game->scene->width() > 800) {
-        xPos += game->player->x() + game->player->boundingRect().width()*game->player->scale() / 2 - game->sceneRect().width() / 2;
-        yPos += game->player->y() + game->player->boundingRect().height()*game->player->scale() / 2 - game->sceneRect().height() / 2 +5;
-        setRect(xPos,yPos,800,150);
-    }
 
     avatar->setPixmap(QPixmap(game->speech[start].speaker));
 

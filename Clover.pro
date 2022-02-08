@@ -20,7 +20,6 @@ SOURCES += \
     main.cpp \
     npc.cpp \
     player.cpp \
-    speechline.cpp
 
 HEADERS += \
     bullet.h \
@@ -31,7 +30,6 @@ HEADERS += \
     game.h \
     npc.h \
     player.h \
-    speechline.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

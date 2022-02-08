@@ -14,14 +14,13 @@
 #include "button.h"
 #include "drinkgame.h"
 #include "clovergame.h"
-//#include "riddlebox.h"
 #include <QVector>
 
 class Game: public QGraphicsView{
     Q_OBJECT
 public:
     // constructors
-    Game(QWidget * parent=0);
+    Game(QWidget * parent = nullptr);
 
     // public methods
     void save();
@@ -53,8 +52,6 @@ public:
     };
 
     Progress progress = START;
-
-//    const static QVector<Riddle> riddles;
 
     const static QVector<Speechline> speech;
 

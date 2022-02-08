@@ -10,45 +10,56 @@ class GameObject : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     GameObject(QGraphicsItem *parent = nullptr);
-    virtual ~GameObject() = default;
+    ~GameObject() override = default;
 
 public slots:
     virtual bool interact() = 0;
 };
 
-class Bug : public GameObject
+class Enemy : public GameObject
+{
+    Q_OBJECT
+public:
+    Enemy(QGraphicsItem *parent = nullptr) {}
+    ~Enemy() override = default;
+
+public slots:
+    virtual bool interact() override { return true; }
+    virtual void shot() {}
+};
+
+class Bug : public Enemy
 {
     Q_OBJECT
 public:
     Bug(QGraphicsItem *parent = nullptr);
-    virtual ~Bug();
+    ~Bug() override ;
 
 public slots:
     virtual bool interact() override;
     void start();
     void move();
-    void shot();
+    void shot() override;
 
 private:
     QTimer * timer;
     static int bugCount;
     bool dead = false;
-//    bool moving = false;
 };
 
-class BugBoss : public GameObject
+class BugBoss : public Enemy
 {
     Q_OBJECT
 public:
     BugBoss(QGraphicsItem *parent = nullptr);
-    virtual ~BugBoss();
+    ~BugBoss() override;
 
 public slots:
     virtual bool interact() override;
     void start();
     void move();
     void shoot();
-    void shot();
+    void shot() override;
     void recover();
 
 private:
@@ -67,7 +78,7 @@ class Buzz : public GameObject
     Q_OBJECT
 public:
     Buzz(int id, QGraphicsItem *parent = nullptr);
-    virtual ~Buzz();
+    ~Buzz() override;
     static int current_level();
 
 public slots:
@@ -86,7 +97,7 @@ class Flower : public GameObject
     Q_OBJECT
 public:
     Flower(int id, QGraphicsItem *parent = nullptr);
-    virtual ~Flower();
+    ~Flower() override;
     static const QVector<QPointF> points;
     static const int width = 180;
     static const int height = 320;
@@ -117,7 +128,7 @@ class Gardener : public GameObject
     Q_OBJECT
 public:
     Gardener(QGraphicsItem *parent = nullptr);
-    virtual ~Gardener() = default;
+    ~Gardener() override = default;
 
 public slots:
     virtual bool interact() override;
@@ -128,7 +139,7 @@ class Mice : public GameObject
     Q_OBJECT
 public:
     Mice(QGraphicsItem *parent = nullptr);
-    virtual ~Mice() = default;
+    ~Mice() override = default;
 
 public slots:
     virtual bool interact() override;
@@ -139,7 +150,7 @@ class Passage : public GameObject
     Q_OBJECT
 public:
     Passage(QGraphicsItem *parent = nullptr);
-    virtual ~Passage() = default;
+    ~Passage() override = default;
 
 public slots:
     virtual bool interact() override;
