@@ -5,8 +5,7 @@
 #include <QGraphicsPixmapItem>
 #include <QTimer>
 
-class Bullet : public QObject, public QGraphicsPixmapItem
-{
+class Bullet : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     Bullet(int dir, qreal size = 1, QGraphicsItem *parent = nullptr);
@@ -31,8 +30,7 @@ private:
     QTimer * timer;
 };
 
-class BugBossBuzz : public QGraphicsTextItem
-{
+class BugBossBuzz : public QGraphicsTextItem {
     Q_OBJECT
 public:
     BugBossBuzz(QGraphicsItem *parent = nullptr);
@@ -47,7 +45,6 @@ signals:
 private:
     QTimer * timer;
     const QVector<QString> buzzs = {"<i>бззззз</i>", "<i>жжжжжж</i>", "<i>шшшшшш</i>"};
-
 };
 
 #endif // BULLET_H

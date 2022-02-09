@@ -11,8 +11,7 @@
 #include "QCursor"
 #include <QDebug>
 
-class Digit : public QGraphicsTextItem
-{
+class Digit : public QGraphicsTextItem {
     Q_OBJECT
 public:
     Digit(int digit, QGraphicsItem* parent = nullptr);
@@ -27,8 +26,7 @@ private:
     int value_;
 };
 
-class CloverGame : public QObject, public QGraphicsPixmapItem
-{
+class CloverGame : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     CloverGame(QGraphicsItem * parent = nullptr);

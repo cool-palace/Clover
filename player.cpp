@@ -40,7 +40,6 @@ bool Player::phones_are_on() {
 }
 
 void Player::keyPressEvent(QKeyEvent *event) {
-
     if (event->key() == Qt::Key_Space) {
         if (!canShoot) {
             phones_on = true;
@@ -50,14 +49,13 @@ void Player::keyPressEvent(QKeyEvent *event) {
         } else if (Bullet::bullet_count < 10) {
             direction = RIGHT;
 
-    //        if (bulletSound->state() == QMediaPlayer::PlayingState){
-    //            bulletSound->setPosition(0);
-    //        } else if (bulletSound->state() == QMediaPlayer::StoppedState){
-    //            bulletSound->play();
-    //        }
+            if (bulletSound->state() == QMediaPlayer::PlayingState){
+                bulletSound->setPosition(0);
+            } else if (bulletSound->state() == QMediaPlayer::StoppedState){
+                bulletSound->play();
+            }
 
             Bullet * bullet = new Bullet(direction);
-
             switch (direction) {
             case UP:
                 bullet->setPos(x()+boundingRect().width()/2,y()-bullet->boundingRect().height());
@@ -73,8 +71,8 @@ void Player::keyPressEvent(QKeyEvent *event) {
                 break;
             }
             game->scene->addItem(bullet);
-            return;
         }
+        return;
     }
 
     // calculating new position

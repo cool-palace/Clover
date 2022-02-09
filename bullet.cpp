@@ -21,7 +21,7 @@ Bullet::Bullet(int dir, qreal size, QGraphicsItem *parent): QObject(), QGraphics
 Bullet::~Bullet() {
     delete timer;
     --bullet_count;
-};
+}
 
 void Bullet::move() {
     int step = 15;
@@ -76,7 +76,7 @@ BugBossBuzz::BugBossBuzz(QGraphicsItem *parent): QGraphicsTextItem(parent) {
 
 BugBossBuzz::~BugBossBuzz() {
     delete timer;
-};
+}
 
 void BugBossBuzz::move() {
     int step = -15;

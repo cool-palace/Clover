@@ -9,6 +9,7 @@
         <file>Misato.mp3</file>
         <file>Waking up in the Morning.mp3</file>
         <file>When I Find Peace of Mind.mp3</file>
+        <file>bullet.wav</file>
     </qresource>
     <qresource prefix="/images">
         <file>bg.jpg</file>

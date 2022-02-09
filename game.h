@@ -16,16 +16,11 @@
 #include "clovergame.h"
 #include <QVector>
 
-class Game: public QGraphicsView{
+class Game: public QGraphicsView {
     Q_OBJECT
 public:
-    // constructors
     Game(QWidget * parent = nullptr);
 
-    // public methods
-    void save();
-
-    // public attributes
     QGraphicsScene * scene;
     Player * player;
     Gardener * gardener;
@@ -67,6 +62,7 @@ public:
     constexpr static int help = cloverSeqStart + 38;
 
 public slots:
+    void save();
     void init();
     void start();
     void outside();

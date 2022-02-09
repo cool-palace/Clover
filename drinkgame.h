@@ -10,8 +10,7 @@
 #include "QCursor"
 #include <QDebug>
 
-class Drink : public QObject, public QGraphicsPixmapItem
-{
+class Drink : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     Drink(int id, QGraphicsItem * parent = nullptr);
@@ -35,8 +34,7 @@ private:
     QPointF m_shiftMouseCoords;
 };
 
-class DrinkGame : public QObject, public QGraphicsPixmapItem
-{
+class DrinkGame : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     DrinkGame(QGraphicsItem* parent = nullptr);

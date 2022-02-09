@@ -5,8 +5,7 @@
 #include <QDebug>
 #include "bullet.h"
 
-class GameObject : public QObject, public QGraphicsPixmapItem
-{
+class GameObject : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     GameObject(QGraphicsItem *parent = nullptr);
@@ -16,11 +15,10 @@ public slots:
     virtual bool interact() = 0;
 };
 
-class Enemy : public GameObject
-{
+class Enemy : public GameObject {
     Q_OBJECT
 public:
-    Enemy(QGraphicsItem *parent = nullptr) {}
+    Enemy(QGraphicsItem *parent = nullptr);
     ~Enemy() override = default;
 
 public slots:
@@ -28,8 +26,7 @@ public slots:
     virtual void shot() {}
 };
 
-class Bug : public Enemy
-{
+class Bug : public Enemy {
     Q_OBJECT
 public:
     Bug(QGraphicsItem *parent = nullptr);
@@ -47,8 +44,7 @@ private:
     bool dead = false;
 };
 
-class BugBoss : public Enemy
-{
+class BugBoss : public Enemy {
     Q_OBJECT
 public:
     BugBoss(QGraphicsItem *parent = nullptr);
@@ -73,8 +69,7 @@ private:
     QTimer * hurt_timer;
 };
 
-class Buzz : public GameObject
-{
+class Buzz : public GameObject {
     Q_OBJECT
 public:
     Buzz(int id, QGraphicsItem *parent = nullptr);
@@ -92,8 +87,7 @@ private:
     static int level;
 };
 
-class Flower : public GameObject
-{
+class Flower : public GameObject {
     Q_OBJECT
 public:
     Flower(int id, QGraphicsItem *parent = nullptr);
@@ -123,8 +117,7 @@ private:
     QGraphicsTextItem * label;
 };
 
-class Gardener : public GameObject
-{
+class Gardener : public GameObject {
     Q_OBJECT
 public:
     Gardener(QGraphicsItem *parent = nullptr);
@@ -134,8 +127,7 @@ public slots:
     virtual bool interact() override;
 };
 
-class Mice : public GameObject
-{
+class Mice : public GameObject {
     Q_OBJECT
 public:
     Mice(QGraphicsItem *parent = nullptr);
@@ -145,8 +137,7 @@ public slots:
     virtual bool interact() override;
 };
 
-class Passage : public GameObject
-{
+class Passage : public GameObject {
     Q_OBJECT
 public:
     Passage(QGraphicsItem *parent = nullptr);

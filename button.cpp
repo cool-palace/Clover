@@ -1,11 +1,6 @@
 #include "button.h"
-#include <QGraphicsTextItem>
-#include <QFont>
-#include <QDebug>
 
 Button::Button(QString name, QGraphicsItem *parent): QGraphicsRectItem(parent) {
-    brush.setStyle(Qt::SolidPattern);
-
     text = new QGraphicsTextItem(name,this);
 
     if (name != "Больше" && name != "Меньше" && name != "Готово" && name != "Сбросить" && name != "Понятно") {
@@ -17,7 +12,7 @@ Button::Button(QString name, QGraphicsItem *parent): QGraphicsRectItem(parent) {
         QFont titleFont("Calibri",12);
         text->setFont(titleFont);
     }
-
+    brush.setStyle(Qt::SolidPattern);
     brush.setColor(Qt::darkYellow);
     setBrush(brush);
 

@@ -5,6 +5,8 @@ extern Game * game;
 
 GameObject::GameObject(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent) {}
 
+Enemy::Enemy(QGraphicsItem *parent) : GameObject(parent) {}
+
 Bug::Bug(QGraphicsItem *parent): Enemy(parent) {
     setPixmap(QPixmap(":/images/bug-sprite.png"));
 
@@ -89,6 +91,7 @@ BugBoss::BugBoss(QGraphicsItem *parent): Enemy(parent) {
     connect(shoot_timer,SIGNAL(timeout()),this,SLOT(shoot()));
     hurt_timer = new QTimer(this);
     hurt_timer->setSingleShot(true);
+    connect(hurt_timer,SIGNAL(timeout()),this,SLOT(recover()));
 }
 
 BugBoss::~BugBoss() {
@@ -141,7 +144,6 @@ void BugBoss::shot() {
     if (--lives > 0) {
         setPixmap(QPixmap(":/images/boss-hit.png"));
         hurt_timer->start(100);
-        connect(hurt_timer,SIGNAL(timeout()),this,SLOT(recover()));
     } else {
         game->dialogbox->getBox(Game::bugFightStart+8,Game::bugFightStart+8);
         delete this;
@@ -319,9 +321,10 @@ void Flower::show_path() {
 
     QGraphicsPathItem * path = new QGraphicsPathItem(myPath);
     QPen myPen(QColor(19, 136, 8), 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-    path->setPen(myPen);
-    path->show();
-    game->scene->addItem(path);
+    path->setPen(myPen);    
+//    Let this be a little easter egg not visible in the game
+//    path->show();
+//    game->scene->addItem(path);
 }
 
 Gardener::Gardener(QGraphicsItem *parent) : GameObject(parent) {
@@ -372,7 +375,6 @@ bool Passage::interact() {
         game->dialogbox->getBox(Game::phonesSeqStart, Game::phonesSeqStart+1);
         game->progress = Game::PHONES_GAME_STARTED;
         return false;
-        break;
     case Game::PHONES_GAME_STARTED:
         if (Buzz::current_level() < 3) {
             Buzz::next_level();

@@ -6,16 +6,12 @@
 #include <QGraphicsItem>
 #include <QMediaPlayer>
 
-class Player : public QObject, public QGraphicsPixmapItem{
+class Player : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     Player(QGraphicsItem * parent = nullptr);
     ~Player() override;
-    void keyPressEvent(QKeyEvent * event) override;
-    void keyReleaseEvent(QKeyEvent * event) override;
-    void setMovable();
-    void setImmobile();
-    bool phones_are_on();
+
     enum directions {
         UP,
         DOWN,
@@ -24,6 +20,11 @@ public:
     };
 
 public slots:
+    void keyPressEvent(QKeyEvent * event) override;
+    void keyReleaseEvent(QKeyEvent * event) override;
+    void setMovable();
+    void setImmobile();
+    bool phones_are_on();
     void shot();
     void enable_shooting();
     void disable_shooting();
@@ -41,7 +42,6 @@ private:
     bool canShoot = false;
     bool phones_on = false;
     directions direction = RIGHT;
-
 };
 
 #endif // PLAYER_H

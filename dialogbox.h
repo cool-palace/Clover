@@ -6,8 +6,7 @@
 #include <QGraphicsItemGroup>
 #include <QTimer>
 
-class Speechline
-{
+class Speechline {
 public:
     Speechline(QString in_speaker = ":/images/player.png", QString in_line = "hello") :
             speaker(in_speaker), line(in_line) {}
@@ -16,8 +15,7 @@ public:
     QString line;
 };
 
-class DialogBox : public QObject, public QGraphicsRectItem
-{
+class DialogBox : public QObject, public QGraphicsRectItem {
     Q_OBJECT
 public:
     DialogBox(QGraphicsItem * parent = nullptr);

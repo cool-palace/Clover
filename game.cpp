@@ -7,7 +7,7 @@
 Game::Game(QWidget* parent) {
     Q_UNUSED(parent);
     scene = new QGraphicsScene();
-    scene->setSceneRect(0,0,800,600); // make the scene 800x600 instead of infinity by infinity (default)
+    scene->setSceneRect(0,0,800,600);
 
     setScene(scene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -28,8 +28,7 @@ Game::Game(QWidget* parent) {
     current_music->setPlaylist(music);
 }
 
-void Game::displayMainMenu(){
-
+void Game::displayMainMenu() {
     music->setCurrentIndex(0);
     current_music->setVolume(100);
     current_music->play();
@@ -115,7 +114,6 @@ void Game::start(){
     gardener->setPos(scene->width()*2/5-gardener->boundingRect().width()/2, scene->height()/2-gardener->boundingRect().height()/2);
     scene->addItem(gardener);
 
-    player->setPixmap(QPixmap(":/images/player-left.png"));
     player->set_direction(Player::directions::LEFT);
 
     switch (progress) {
@@ -252,7 +250,6 @@ void Game::clover_game() {
     clovergame = new CloverGame();
     connect(clovergame,SIGNAL(result(int, int)),dialogbox,SLOT(getBox(int, int)));
     scene->addItem(clovergame);
-
     show();
 }
 
